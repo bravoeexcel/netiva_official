@@ -5,13 +5,6 @@
  * Environment variables (set in Zeabur dashboard):
  *   DATABASE_URL  — PostgreSQL connection string provided by Zeabur
  *                   e.g. postgres://user:pass@host:5432/dbname
- *
- * The server:
- *   - Serves index.html (and static files from /public) at "/"
- *   - Exposes a REST API at /api/* replacing all Supabase calls
- *   - Stores the main JSON document in the "netiva_store" table
- *   - Stores uploaded images as base64 in the "netiva_images" table
- *   - Provides Server-Sent Events (SSE) at /api/events for real-time updates
  */
 
 require('dotenv').config();
@@ -25,14 +18,24 @@ const fs       = require('fs');
 const app  = express();
 const port = process.env.PORT || 3000;
 
+// ── Resolve frontend directory ────────────────────────────────────────────────
+// Zeabur copies repo files to /src. We support two layouts:
+//   1. index.html lives in  <repo>/public/index.html  → served from public/
+//   2. index.html lives in  <repo>/index.html          → served from root
+const ROOT = __dirname; // /src inside Zeabur container
+const PUBLIC_DIR = fs.existsSync(path.join(ROOT, 'public', 'index.html'))
+  ? path.join(ROOT, 'public')
+  : ROOT;
+
+console.log('Serving frontend from:', PUBLIC_DIR);
+
 // ── Database ─────────────────────────────────────────────────────────────────
-// Zeabur PostgreSQL runs on an internal private network — SSL is NOT used.
-// Only enable SSL if DATABASE_URL explicitly contains "sslmode=require"
-// (e.g. if you later point this at an external managed DB that requires it).
+// Zeabur PostgreSQL runs on an internal private network — no SSL needed.
+// Only enable SSL if DATABASE_URL explicitly contains "sslmode=require".
 function buildSSL(url) {
   if (!url) return false;
   if (url.includes('sslmode=require')) return { rejectUnauthorized: false };
-  return false; // Zeabur internal PG: plain TCP, no SSL
+  return false;
 }
 
 const pool = new Pool({
@@ -43,8 +46,8 @@ const pool = new Pool({
 async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS netiva_store (
-      doc_id TEXT PRIMARY KEY,
-      data   JSONB NOT NULL DEFAULT '{}',
+      doc_id     TEXT PRIMARY KEY,
+      data       JSONB NOT NULL DEFAULT '{}',
       updated_at TIMESTAMPTZ DEFAULT NOW()
     );
   `);
@@ -54,7 +57,7 @@ async function initDB() {
       bucket     TEXT NOT NULL DEFAULT 'netiva',
       path       TEXT NOT NULL,
       mime_type  TEXT NOT NULL DEFAULT 'image/jpeg',
-      data       TEXT NOT NULL,           -- base64-encoded image bytes
+      data       TEXT NOT NULL,
       created_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(bucket, path)
     );
@@ -65,18 +68,15 @@ async function initDB() {
 // ── Middleware ────────────────────────────────────────────────────────────────
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
+app.use(express.static(PUBLIC_DIR));
 
-// Serve uploaded images & static assets
-app.use(express.static(path.join(__dirname, 'public')));
-
-// Multer — store uploads in memory, then persist to DB
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 8 * 1024 * 1024 } // 8 MB per file
+  limits: { fileSize: 8 * 1024 * 1024 }
 });
 
-// ── SSE helpers (real-time updates replacing Supabase Realtime) ──────────────
-const sseClients = new Map(); // docId → Set of response objects
+// ── SSE (real-time updates) ───────────────────────────────────────────────────
+const sseClients = new Map();
 
 function notifyClients(docId) {
   const clients = sseClients.get(docId);
@@ -86,7 +86,6 @@ function notifyClients(docId) {
   }
 }
 
-// ── API: SSE endpoint ─────────────────────────────────────────────────────────
 app.get('/api/events/:docId', (req, res) => {
   const { docId } = req.params;
   res.setHeader('Content-Type', 'text/event-stream');
@@ -97,7 +96,6 @@ app.get('/api/events/:docId', (req, res) => {
   if (!sseClients.has(docId)) sseClients.set(docId, new Set());
   sseClients.get(docId).add(res);
 
-  // Heartbeat every 30 s to keep connection alive through proxies
   const hb = setInterval(() => {
     try { res.write(': ping\n\n'); } catch (_) { clearInterval(hb); }
   }, 30000);
@@ -126,7 +124,7 @@ app.get('/api/doc/:docId', async (req, res) => {
 // ── API: Upsert document ──────────────────────────────────────────────────────
 app.post('/api/doc/:docId', async (req, res) => {
   const { docId } = req.params;
-  const { data, merge } = req.body; // merge: boolean
+  const { data, merge } = req.body;
 
   try {
     let toWrite = data;
@@ -136,9 +134,7 @@ app.post('/api/doc/:docId', async (req, res) => {
         'SELECT data FROM netiva_store WHERE doc_id = $1',
         [docId]
       );
-      if (rows.length > 0) {
-        toWrite = deepMerge(rows[0].data, data);
-      }
+      if (rows.length > 0) toWrite = deepMerge(rows[0].data, data);
     }
 
     await pool.query(`
@@ -157,8 +153,6 @@ app.post('/api/doc/:docId', async (req, res) => {
 });
 
 // ── API: Upload image ─────────────────────────────────────────────────────────
-// POST /api/storage/upload
-// Body: multipart form — field "file", query params: bucket, path
 app.post('/api/storage/upload', upload.single('file'), async (req, res) => {
   try {
     const bucket   = req.body.bucket || req.query.bucket || 'netiva';
@@ -174,7 +168,6 @@ app.post('/api/storage/upload', upload.single('file'), async (req, res) => {
         SET data = $5, mime_type = $4, created_at = NOW()
     `, [id, bucket, filePath, mime, b64]);
 
-    // Return a public URL that our /api/storage/object endpoint will serve
     const publicUrl = `/api/storage/object/${bucket}/${filePath}`;
     res.json({ ok: true, path: filePath, publicUrl });
   } catch (err) {
@@ -186,8 +179,8 @@ app.post('/api/storage/upload', upload.single('file'), async (req, res) => {
 // ── API: Serve stored image ───────────────────────────────────────────────────
 app.get('/api/storage/object/:bucket/*', async (req, res) => {
   try {
-    const bucket = req.params.bucket;
-    const filePath = req.params[0]; // everything after bucket/
+    const bucket   = req.params.bucket;
+    const filePath = req.params[0];
     const { rows } = await pool.query(
       'SELECT data, mime_type FROM netiva_images WHERE bucket = $1 AND path = $2',
       [bucket, filePath]
@@ -203,18 +196,13 @@ app.get('/api/storage/object/:bucket/*', async (req, res) => {
   }
 });
 
-// ── Serve the frontend ────────────────────────────────────────────────────────
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// Fallback for any other routes → SPA
+// ── Catch-all: serve index.html for SPA routes ────────────────────────────────
 app.get('*', (req, res) => {
-  const indexPath = path.join(__dirname, 'public', 'index.html');
+  const indexPath = path.join(PUBLIC_DIR, 'index.html');
   if (fs.existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    res.status(404).send('Not found');
+    res.status(404).send('index.html not found. Make sure it is in the repo root or public/ folder.');
   }
 });
 

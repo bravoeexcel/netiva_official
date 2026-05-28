@@ -26,12 +26,18 @@ const app  = express();
 const port = process.env.PORT || 3000;
 
 // ── Database ─────────────────────────────────────────────────────────────────
+// Zeabur PostgreSQL runs on an internal private network — SSL is NOT used.
+// Only enable SSL if DATABASE_URL explicitly contains "sslmode=require"
+// (e.g. if you later point this at an external managed DB that requires it).
+function buildSSL(url) {
+  if (!url) return false;
+  if (url.includes('sslmode=require')) return { rejectUnauthorized: false };
+  return false; // Zeabur internal PG: plain TCP, no SSL
+}
+
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  // Zeabur PostgreSQL uses SSL in production
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('localhost')
-    ? false
-    : { rejectUnauthorized: false }
+  ssl: buildSSL(process.env.DATABASE_URL)
 });
 
 async function initDB() {

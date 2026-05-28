@@ -2099,15 +2099,18 @@ function rShop(r){
   const THEME_OVERLAYS={
     brown:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
-      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)'}"></div>
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(160deg,rgba(60,32,10,0.30) 0%,rgba(28,14,4,0.42) 45%,rgba(18,8,2,0.60) 100%)'  :'linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)'}"></div>
+      ${img?`<div class="hero-slide-overlay" style="background:linear-gradient(to top,rgba(0,0,0,0.50) 0%,rgba(0,0,0,0.10) 50%,transparent 100%)"></div>`:``}
       <div class="hero-grain"></div>`,
     red:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
-      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)'}"></div>
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(160deg,rgba(120,18,10,0.28) 0%,rgba(68,8,8,0.40) 45%,rgba(32,4,4,0.58) 100%)'  :'linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)'}"></div>
+      ${img?`<div class="hero-slide-overlay" style="background:linear-gradient(to top,rgba(0,0,0,0.50) 0%,rgba(0,0,0,0.10) 50%,transparent 100%)"></div>`:``}
       <div class="hero-grain hero-grain-red"></div>`,
     green:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
-      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)'}"></div>
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(160deg,rgba(28,64,14,0.26) 0%,rgba(14,36,8,0.38) 45%,rgba(6,18,2,0.55) 100%)'  :'linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)'}"></div>
+      ${img?`<div class="hero-slide-overlay" style="background:linear-gradient(to top,rgba(0,0,0,0.50) 0%,rgba(0,0,0,0.10) 50%,transparent 100%)"></div>`:``}
       <div class="hero-grain hero-grain-green"></div>`,
   };
 
@@ -2501,8 +2504,20 @@ async function handleSlideImg(e){
     let bg=sl.querySelector('.hero-slide-bg');
     if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:1'; sl.prepend(bg); }
     bg.src=savedUrl; bg.style.opacity='1';
+    // Switch first overlay to lighter colour tint, add bottom-dark overlay if not already there
+    const LIGHT_GRADIENTS=[
+      'linear-gradient(160deg,rgba(60,32,10,0.30) 0%,rgba(28,14,4,0.42) 45%,rgba(18,8,2,0.60) 100%)',
+      'linear-gradient(160deg,rgba(120,18,10,0.28) 0%,rgba(68,8,8,0.40) 45%,rgba(32,4,4,0.58) 100%)',
+      'linear-gradient(160deg,rgba(28,64,14,0.26) 0%,rgba(14,36,8,0.38) 45%,rgba(6,18,2,0.55) 100%)'
+    ];
     const ov=sl.querySelector('.hero-slide-overlay');
-    if(ov) ov.style.background='linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)';
+    if(ov) ov.style.background=LIGHT_GRADIENTS[i]||LIGHT_GRADIENTS[0];
+    if(!sl.querySelectorAll('.hero-slide-overlay')[1]){
+      const darkOv=document.createElement('div');
+      darkOv.className='hero-slide-overlay';
+      darkOv.style.background='linear-gradient(to top,rgba(0,0,0,0.50) 0%,rgba(0,0,0,0.10) 50%,transparent 100%)';
+      ov ? ov.after(darkOv) : sl.prepend(darkOv);
+    }
   }
 }
 
@@ -2510,8 +2525,11 @@ function _refreshSlideImgPreview(i,url){
   const preview=document.getElementById('slide-img-preview');
   const removeBtn=document.getElementById('slide-img-remove-btn');
   const uploadLabel=document.getElementById('slide-img-upload-label');
-  if(preview) preview.innerHTML=url?`<div style="border-radius:8px;overflow:hidden;margin-bottom:8px;border:.5px solid #dbd5c8;position:relative"><img src="${url}" style="width:100%;height:110px;object-fit:cover;display:block"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);border-radius:4px;padding:2px 6px;font-size:10px;color:#fff">Current image</div></div>`:'';
-  if(removeBtn) removeBtn.style.display=url?'flex':'none';
+  if(preview) preview.innerHTML=url
+    ?`<div style="border-radius:8px;overflow:hidden;margin-bottom:8px;border:.5px solid #dbd5c8;position:relative"><img src="${url}" style="width:100%;height:110px;object-fit:cover;display:block"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);border-radius:4px;padding:2px 6px;font-size:10px;color:#fff">Current image</div></div><button class="btn sm d" style="width:100%;justify-content:center;margin-bottom:10px;display:flex;gap:6px;align-items:center" onclick="removeSlideImg()"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>Remove image</button>`
+    :'';
+  // Hide the standalone remove btn — the one inside preview is used instead
+  if(removeBtn) removeBtn.style.display='none';
   if(uploadLabel) uploadLabel.textContent=url?'Replace image':'Upload background image';
 }
 
@@ -2524,10 +2542,22 @@ function removeSlideImg(){
   sv(true);
   _refreshSlideImgPreview(i,'');
   updateSlidePreview();
-  // Remove from live slide
+  // Remove image and restore full colour gradient on live slide
   const slides=document.querySelectorAll('.hero-slide');
   const sl=slides[i];
-  if(sl){ const bg=sl.querySelector('.hero-slide-bg'); if(bg) bg.remove(); }
+  if(sl){
+    const bg=sl.querySelector('.hero-slide-bg'); if(bg) bg.remove();
+    // Remove the extra bottom-dark overlay (only added when an image is present)
+    sl.querySelectorAll('.hero-slide-overlay').forEach((ov,idx)=>{ if(idx>0) ov.remove(); });
+    // Restore the full theme colour gradient
+    const FULL_GRADIENTS=[
+      'linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)',
+      'linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)',
+      'linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)'
+    ];
+    const ov=sl.querySelector('.hero-slide-overlay');
+    if(ov) ov.style.background=FULL_GRADIENTS[i]||FULL_GRADIENTS[0];
+  }
 }
 function rShopProducts(){
   const grid=document.getElementById('mp');if(!grid)return;

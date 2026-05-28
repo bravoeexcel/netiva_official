@@ -29,13 +29,25 @@
     input, select, textarea { border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 7px 10px; background: var(--color-background-primary); color: var(--color-text-primary); }
     input:focus, select:focus, textarea:focus { border-color: var(--color-border-primary); }
 
-    .nav { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.5rem; border-bottom: .5px solid var(--color-border-tertiary); background: rgba(250,248,244,0.95); backdrop-filter: blur(8px); gap: 8px; position: sticky; top: 0; z-index: 50; }
-    .logo { font-size: 18px; font-weight: 600; cursor: pointer; letter-spacing: -.5px; flex-shrink: 0; color: var(--color-text-primary); }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.5rem; border-bottom: .5px solid var(--color-border-tertiary); background: rgba(250,248,244,0.95); backdrop-filter: blur(8px); gap: 8px; position: sticky; top: 0; z-index: 50; transition: background .3s, border-color .3s; }
+    .nav.nav-hero { position: fixed; width: 100%; background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
+    .logo { font-size: 18px; font-weight: 600; cursor: pointer; letter-spacing: -.5px; flex-shrink: 0; color: var(--color-text-primary); transition: color .3s; }
+    .nav.nav-hero .logo { color: #e8c99a; }
     .nav-c { display: flex; gap: 1.5rem; }
     .nav-c a { font-size: 13px; color: var(--color-text-secondary); cursor: pointer; text-decoration: none; }
     .nav-c a:hover { color: var(--color-text-primary); }
     .nav-r { display: flex; align-items: center; gap: 8px; }
-    .rate-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; background: var(--color-background-secondary); border: .5px solid var(--color-border-secondary); border-radius: 999px; padding: 3px 10px; color: var(--color-text-secondary); }
+    .rate-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; background: var(--color-background-secondary); border: .5px solid var(--color-border-secondary); border-radius: 999px; padding: 3px 10px; color: var(--color-text-secondary); transition: background .3s, border-color .3s, color .3s; }
+    .nav.nav-hero .rate-chip { background: rgba(232,201,154,0.12); border-color: rgba(232,201,154,0.3); color: #e8c99a; }
+    .nav.nav-hero .rate-dot { background: rgba(232,201,154,0.55); }
+    .nav.nav-hero .rate-dot.live { background: #9de86a; }
+    .nav.nav-hero .nav-link-btn, .nav.nav-hero .lang-dd-btn, .nav.nav-hero #nav-shop, .nav.nav-hero #nav-admin, .nav.nav-hero #lang-label { color: rgba(232,201,154,0.92); }
+    .nav.nav-hero .nav-link-btn:hover, .nav.nav-hero .lang-dd-btn:hover, .nav.nav-hero #nav-shop:hover, .nav.nav-hero #nav-admin:hover { color: #f2e0bc; }
+    .nav.nav-hero .btn { color: rgba(232,201,154,0.92); border-color: rgba(232,201,154,0.35); background: rgba(232,201,154,0.08); }
+    .nav.nav-hero .btn:hover { background: rgba(232,201,154,0.18); border-color: rgba(232,201,154,0.55); color: #f2e0bc; }
+    .nav.nav-hero .btn.p { background: rgba(232,201,154,0.88); color: #2a1a08; border-color: transparent; }
+    .nav.nav-hero .btn.p:hover { background: #e8c99a; }
+    .nav.nav-hero .mob-menu-btn { color: #e8c99a; border-color: rgba(232,201,154,0.35); background: rgba(232,201,154,0.08); }
     .rate-dot { width: 6px; height: 6px; border-radius: 50%; background: #d4a96a; flex-shrink: 0; }
     .rate-dot.live { background: #7aab4e; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -71,7 +83,7 @@
     .bdg.a { background: var(--color-accent-light); color: #7a5230; }
 
     /* ── Hero Carousel ─────────────────────────────────────────── */
-    .hero { position: relative; min-height: 560px; height: 560px; overflow: hidden; background: #2a2218; }
+    .hero { position: relative; min-height: 616px; height: 616px; overflow: hidden; background: #2a2218; }
     .hero.no-img { background: var(--color-background-secondary); min-height: 420px; height: 420px; display: flex; align-items: flex-end; }
 
     /* Carousel track */
@@ -81,7 +93,7 @@
     .hero-slide-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(16,12,6,0.78) 0%, rgba(16,12,6,0.22) 50%, rgba(16,12,6,0.05) 100%); }
 
     /* Left content */
-    .hero-content { position: relative; z-index: 2; padding: 3rem 2.5rem 3.5rem; max-width: 560px; }
+    .hero-content { position: relative; z-index: 2; padding: 3rem 2.5rem 3.5rem; padding-top: calc(3rem + 56px); max-width: 560px; }
     .hero h1 { font-size: 46px; font-weight: 600; margin-bottom: 14px; letter-spacing: -1px; color: #fff; line-height: 1.1; }
     .hero p { font-size: 16px; color: rgba(255,255,255,.72); margin-bottom: 2rem; font-weight: 300; line-height: 1.6; }
 
@@ -120,6 +132,58 @@
     }
     .hero-grain-red { opacity: 0.07; }
     .hero-grain-green { opacity: 0.05; }
+
+    /* Admin edit button on each slide */
+    .hero-slide-edit-btn {
+      position: absolute; top: 72px; right: 1rem; z-index: 10;
+      display: inline-flex; align-items: center; gap: 5px;
+      background: rgba(255,255,255,0.92); border: .5px solid rgba(0,0,0,0.12);
+      border-radius: 8px; padding: 5px 10px; font-size: 12px; font-weight: 500;
+      cursor: pointer; color: #1c1a16; backdrop-filter: blur(6px);
+      transition: background .15s;
+    }
+    .hero-slide-edit-btn:hover { background: #fff; }
+
+    /* Chili silhouette art for the red slide */
+    .hero-chili-art {
+      position: absolute; right: 4rem; top: 50%; transform: translateY(-55%);
+      z-index: 1; width: 180px; height: 340px; pointer-events: none; opacity: 0.15;
+      background:
+        radial-gradient(ellipse 18px 90px at 90px 150px, #e03020 0%, transparent 100%),
+        radial-gradient(ellipse 14px 70px at 110px 170px, #c01808 0%, transparent 100%),
+        radial-gradient(ellipse 12px 50px at 75px 200px, #d02818 0%, transparent 100%),
+        radial-gradient(ellipse 10px 30px at 95px 240px, #b01010 0%, transparent 100%);
+    }
+    .hero-chili-art::before {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 8px 8px at 90px 80px, #c8b080 0%, transparent 100%),
+        radial-gradient(ellipse 6px 6px at 96px 72px, #a08040 0%, transparent 100%),
+        radial-gradient(ellipse 3px 3px at 92px 66px, #806020 0%, transparent 100%);
+    }
+    .hero-chili-art::after {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 40px 10px at 50px 310px, rgba(0,0,0,0.25) 0%, transparent 100%),
+        radial-gradient(ellipse 30px 8px at 130px 330px, rgba(0,0,0,0.18) 0%, transparent 100%);
+    }
+
+    /* Leaf/vegetable silhouette art for the green slide */
+    .hero-leaf-art {
+      position: absolute; right: 3.5rem; bottom: 80px; z-index: 1;
+      width: 220px; height: 280px; pointer-events: none; opacity: 0.14;
+      background:
+        radial-gradient(ellipse 70px 40px at 110px 100px, #3a8a20 0%, transparent 100%),
+        radial-gradient(ellipse 55px 32px at 80px 140px, #2a7010 0%, transparent 100%),
+        radial-gradient(ellipse 50px 28px at 140px 160px, #3a8a20 0%, transparent 100%),
+        radial-gradient(ellipse 40px 22px at 90px 200px, #226010 0%, transparent 100%),
+        radial-gradient(ellipse 35px 20px at 130px 220px, #2a7018 0%, transparent 100%);
+    }
+    .hero-leaf-art::after {
+      content:''; position:absolute; inset:0; pointer-events:none;
+      background:
+        radial-gradient(ellipse 60px 12px at 100px 268px, rgba(0,0,0,0.3) 0%, transparent 100%);
+    }
 
     /* Mushroom silhouette art for the brown slide */
     .hero-mushroom-art {
@@ -181,8 +245,8 @@
     .hero-arrow.next { right: 4rem; }
 
     @media (max-width: 600px) {
-      .hero { min-height: 420px; height: 420px; }
-      .hero-slide { height: 420px; }
+      .hero { min-height: 476px; height: 476px; }
+      .hero-slide { height: 476px; }
       .hero-content { padding: 2rem 1.5rem 3rem; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 14px; margin-bottom: 1.5rem; }
@@ -495,10 +559,10 @@
       .nav-desktop-links { display: none !important; }
       .nav { position: relative; }
       .rate-chip { font-size: 10px; padding: 3px 7px; max-width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-      .hero { min-height: 340px; }
+      .hero { min-height: 396px; }
       .hero h1 { font-size: 30px; }
       .hero p { font-size: 14px; }
-      .hero-content { padding: 2rem 1.5rem 2.5rem; }
+      .hero-content { padding: 2rem 1.5rem 2.5rem; padding-top: calc(2rem + 56px); }
       .prods { grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 1rem; }
       .pi { height: 160px; font-size: 44px; }
       .pb { padding: 10px 12px 14px; }
@@ -1057,6 +1121,11 @@ function _applyProdTextDoc(prodId, data){
 function _applyHeroDoc(data){
   if(!data) return;
   if(data.heroImage!==undefined) db.heroImage=data.heroImage;
+  // Per-slide overlay images
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  for(let i=0;i<3;i++){
+    if(data['slide'+i]!==undefined) db.heroSlides[i]=data['slide'+i];
+  }
 }
 // Apply referrer QR doc
 function _applyRefDoc(refId, data){
@@ -1071,6 +1140,8 @@ function _applyRefDoc(refId, data){
 function _applyImgPayload(data){
   if(!data) return;
   if(data.heroImage!==undefined) db.heroImage=data.heroImage;
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  for(let i=0;i<3;i++){ if(data['heroSlide'+i]!==undefined){ if(!db.heroSlides[i])db.heroSlides[i]={}; db.heroSlides[i].img=data['heroSlide'+i]; } }
   (db.products||[]).forEach(prod=>{
     const key='pi_'+prod.id;
     if(data[key]!==undefined){ prod.imgs=data[key]; prod.img=data[key][0]||''; }
@@ -1085,6 +1156,7 @@ function _applyImgPayload(data){
 function _buildLocalImgCache(){
   const p={};
   if(db.heroImage!==undefined) p.heroImage=db.heroImage;
+  (db.heroSlides||[]).forEach((s,i)=>{ if(s&&s.img) p['heroSlide'+i]=s.img; });
   (db.products||[]).forEach(prod=>{
     if(prod.imgs&&prod.imgs.length) p['pi_'+prod.id]=prod.imgs;
     else if(prod.img) p['pi_'+prod.id]=[prod.img];
@@ -1150,7 +1222,10 @@ function sv(immediate=false){
   _markDirty('__main__', null);
 
   // Hero image
-  if(db.heroImage) _markDirty('hero', {heroImage: db.heroImage});
+  const _heroDocPayload={};
+  if(db.heroImage) _heroDocPayload.heroImage=db.heroImage;
+  (db.heroSlides||[]).forEach((s,i)=>{ if(s) _heroDocPayload['slide'+i]=s; });
+  if(Object.keys(_heroDocPayload).length) _markDirty('hero', _heroDocPayload);
 
   // Only dirty the image/text docs for products that have content
   // (we don't re-dirty every product — callers use svProd() for targeted writes)
@@ -1571,6 +1646,9 @@ function renderCartDrawer(){
 function changeQty(key,delta){const ex=cart.find(x=>x.cartKey===key);if(!ex)return;ex.qty+=delta;if(ex.qty<=0)cart=cart.filter(x=>x.cartKey!==key);rNav();renderCartDrawer();}
 
 function rNav(){
+  // Toggle transparent hero nav on shop page only
+  const navEl=document.querySelector('.nav');
+  if(navEl){ if(vw==='shop'){ navEl.classList.add('nav-hero'); } else { navEl.classList.remove('nav-hero'); } }
   const nr=document.getElementById('nr');if(!nr)return;
   const nrMob=document.getElementById('nr-mob');
   const mobAuth=document.getElementById('mob-nav-auth');
@@ -1610,50 +1688,49 @@ function rShop(r){
   const heroSub=db.heroTextSub||(lang==='zh'||lang==='zht'?'精选食品与饮品，直达您的门口':'Artisan foods & drinks, delivered to your door');
 
   // ── 3 carousel slides: use admin hero image as slide 1 if set, else Unsplash placeholders
-  const SLIDES=[
-    {
-      img: heroImg || 'https://images.unsplash.com/photo-1606914501449-5a96b6ce24ca?w=1400&q=80',
-      zh_main: lang==='zht'?'自然生材':'自然生材',
-      zh_sub:  lang==='zht'?'我們崇尚':'我们崇尚',
-      zh_tag:  '菌菇',
-      title:   heroTitle,
-      sub:     heroSub,
-      theme:   'brown',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1583835746434-cf1534674b41?w=1400&q=80',
-      zh_main: lang==='zht'?'魔鬼辣椒':'魔鬼辣椒',
-      zh_sub:  lang==='zht'?'我們崇尚':'我们崇尚',
-      zh_tag:  '辣椒',
-      title:   lang==='zh'||lang==='zht'?'自然生材':'Fresh from the source',
-      sub:     lang==='zh'||lang==='zht'?'严选优质食材，用心送达':'Carefully sourced, lovingly delivered',
-      theme:   'red',
-    },
-    {
-      img: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=1400&q=80',
-      zh_main: lang==='zht'?'小苦瓜':'小苦瓜',
-      zh_sub:  lang==='zht'?'心向山野':'心向山野',
-      zh_tag:  '蔬菜',
-      title:   lang==='zh'||lang==='zht'?'都往山野去':'Wild & Natural',
-      sub:     lang==='zh'||lang==='zht'?'每一口都是自然的馈赠':'Every bite, a gift from nature',
-      theme:   'green',
-    },
+  // Per-slide defaults (text, theme) merged with any saved overlay images
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  const SLIDE_DEFS=[
+    { theme:'brown', zh_main:'自然生材', zh_sub:'我们崇尚', zh_tag:'菌菇',
+      title: heroTitle, sub: heroSub },
+    { theme:'red',   zh_main:'魔鬼辣椒', zh_sub:'自然生材', zh_tag:'辣椒',
+      title: lang==='zh'||lang==='zht'?'精选好物':'Finest Ingredients',
+      sub:   lang==='zh'||lang==='zht'?'严选优质食材，用心送达':'Carefully sourced, lovingly delivered' },
+    { theme:'green', zh_main:'小苦瓜',   zh_sub:'心向山野', zh_tag:'蔬菜',
+      title: lang==='zh'||lang==='zht'?'都往山野去':'Wild & Natural',
+      sub:   lang==='zh'||lang==='zht'?'每一口都是自然的馈赠':'Every bite, a gift from nature' },
   ];
+  const SLIDES=SLIDE_DEFS.map((def,i)=>({...def,...(db.heroSlides[i]||{})}));
 
+  // Theme: solid colour bg + CSS grain texture + artwork layer. No photo unless admin uploads one.
+  const THEME_BG={ brown:'linear-gradient(135deg,#5c3418 0%,#2a1408 50%,#1a0c04 100%)', red:'linear-gradient(135deg,#7a1a0a 0%,#4a0808 50%,#2a0404 100%)', green:'linear-gradient(135deg,#1e4a10 0%,#0f2e0a 50%,#081a04 100%)' };
   const THEME_OVERLAYS={
-    brown:`<div class="hero-slide-overlay" style="background:linear-gradient(to top, rgba(42,26,10,0.85) 0%, rgba(42,26,10,0.35) 50%, rgba(42,26,10,0.1) 100%)"></div>
+    brown:(img)=>`
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.35">`:``}
+      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(42,26,10,0.82) 0%,rgba(70,38,12,0.6) 100%)"></div>
       <div class="hero-grain"></div>
       <div class="hero-mushroom-art"></div>`,
-    red:`<div class="hero-slide-overlay" style="background:linear-gradient(to top, rgba(90,12,12,0.88) 0%, rgba(130,20,20,0.55) 45%, rgba(100,10,10,0.2) 100%)"></div>
-      <div class="hero-grain hero-grain-red"></div>`,
-    green:`<div class="hero-slide-overlay" style="background:linear-gradient(to top, rgba(18,45,18,0.9) 0%, rgba(30,60,25,0.55) 45%, rgba(20,50,20,0.15) 100%)"></div>
-      <div class="hero-grain hero-grain-green"></div>`,
+    red:(img)=>`
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.3">`:``}
+      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(90,12,12,0.9) 0%,rgba(140,28,18,0.75) 100%)"></div>
+      <div class="hero-grain hero-grain-red"></div>
+      <div class="hero-chili-art"></div>`,
+    green:(img)=>`
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.28">`:``}
+      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(18,45,18,0.92) 0%,rgba(32,72,22,0.78) 100%)"></div>
+      <div class="hero-grain hero-grain-green"></div>
+      <div class="hero-leaf-art"></div>`,
   };
 
-  const slidesHtml=SLIDES.map((s,i)=>`
-    <div class="hero-slide">
-      <img class="hero-slide-bg" src="${s.img}" alt="" loading="${i===0?'eager':'lazy'}">
-      ${THEME_OVERLAYS[s.theme]||THEME_OVERLAYS.brown}
+  const slidesHtml=SLIDES.map((s,i)=>{
+    const fn=THEME_OVERLAYS[s.theme]||THEME_OVERLAYS.brown;
+    const bgColor=THEME_BG[s.theme]||THEME_BG.brown;
+    const editBtn=db.adm?`<button class="hero-slide-edit-btn" onclick="openSlideEdit(${i})" title="Edit slide ${i+1}">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M10 2l2 2-7 7H3v-2L10 2z"/></svg>
+      ${lang==='en'?'Edit':'编辑'}
+    </button>`:'';
+    return `<div class="hero-slide" style="background:${bgColor}">
+      ${fn(s.img||'')}
       <div class="hero-content">
         <h1>${s.title}</h1>
         <p>${s.sub}</p>
@@ -1668,54 +1745,71 @@ function rShop(r){
           <div class="hero-zh-divider"></div>
           <span class="hero-zh-sub">${s.zh_sub}</span>
         </div>
-        <div style="margin-top:20px">
-          <span class="hero-zh-tag">${s.zh_tag}</span>
-        </div>
+        <div style="margin-top:20px"><span class="hero-zh-tag">${s.zh_tag}</span></div>
       </div>
-    </div>`).join('');
+      ${editBtn}
+    </div>`;
+  }).join('');
 
   const dotsHtml=SLIDES.map((_,i)=>`<button class="hero-dot${i===0?' on':''}" onclick="heroGo(${i})" aria-label="Slide ${i+1}"></button>`).join('');
 
-  const adminHeroBar=db.adm?`<div id="hero-admin-bar" style="position:absolute;top:10px;left:10px;z-index:10;display:flex;gap:6px">
-    <button class="btn sm" style="background:rgba(255,255,255,.92);backdrop-filter:blur(4px);border-color:rgba(0,0,0,.12);font-size:12px;display:flex;align-items:center;gap:4px" onclick="toggleHeroEdit()">
-      <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M10 2l2 2-7 7H3v-2L10 2z"/></svg>
-      ${lang==='en'?'Edit Slide 1':lang==='zht'?'編輯橫幅':'编辑横幅'}
-    </button>
-  </div>
-  <div id="hero-edit-panel" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.6);backdrop-filter:blur(2px);align-items:center;justify-content:center;padding:1.5rem">
-    <div style="background:#fff;border-radius:12px;padding:1.5rem;width:100%;max-width:480px;box-shadow:0 8px 32px rgba(0,0,0,.2)">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem">
-        <div style="font-size:15px;font-weight:500">${lang==='en'?'Edit Slide 1 Banner':lang==='zht'?'編輯首頁橫幅':'编辑首页横幅'}</div>
-        <button onclick="toggleHeroEdit()" style="background:none;border:none;cursor:pointer;font-size:20px;color:#6b6a63;line-height:1;padding:0">×</button>
+  // Per-slide edit modal (hidden by default, shown by openSlideEdit(i))
+  const slideEditModal=db.adm?`
+  <div id="slide-edit-modal" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.65);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:1.5rem">
+    <div style="background:#fff;border-radius:14px;padding:1.5rem;width:100%;max-width:500px;box-shadow:0 12px 48px rgba(0,0,0,.28);max-height:90vh;overflow-y:auto">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
+        <div style="font-size:15px;font-weight:600" id="slide-edit-title">Edit Slide</div>
+        <button onclick="closeSlideEdit()" style="background:none;border:none;cursor:pointer;font-size:22px;color:#6b6a63;line-height:1;padding:0 4px">×</button>
       </div>
-      <div id="hero-edit-msg"></div>
+      <div id="slide-edit-msg"></div>
+
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#a39c8f;margin-bottom:10px">Overlay Image (optional)</div>
+      <div id="slide-img-preview" style="margin-bottom:8px"></div>
+      <label style="display:block;border:.5px dashed #dddbd3;border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#f9f8f5;margin-bottom:8px">
+        <div style="font-size:12px;color:#6b6a63" id="slide-img-upload-label">Click to upload image (JPG/PNG/WebP)</div>
+        <input type="file" accept="image/*" style="display:none" onchange="handleSlideImg(event)">
+      </label>
+      <button id="slide-img-remove-btn" class="btn sm d" style="width:100%;justify-content:center;margin-bottom:14px;display:none" onclick="removeSlideImg()">Remove image</button>
+
+      <div style="height:.5px;background:#ece7dd;margin-bottom:14px"></div>
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#a39c8f;margin-bottom:10px">Text Content</div>
+
       <div style="margin-bottom:10px">
-        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">${lang==='en'?'Title':lang==='zht'?'標題':'标题'}</label>
-        <input type="text" id="hero-title-input" value="${heroTitle}" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:14px;font-weight:500">
+        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Title</label>
+        <input type="text" id="slide-edit-heading" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:14px;font-weight:500">
       </div>
-      <div style="margin-bottom:14px">
-        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">${lang==='en'?'Subtitle':lang==='zht'?'副標題':'副标题'}</label>
-        <textarea id="hero-sub-input" rows="2" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px;resize:vertical">${heroSub}</textarea>
+      <div style="margin-bottom:10px">
+        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Subtitle</label>
+        <textarea id="slide-edit-sub" rows="2" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px;resize:vertical;font-family:inherit"></textarea>
       </div>
-      <div style="margin-bottom:14px">
-        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">${lang==='en'?'Slide 1 Background Image':lang==='zht'?'背景圖片':'背景图片'}</label>
-        <label style="display:block;border:.5px dashed #dddbd3;border-radius:8px;padding:10px;text-align:center;cursor:pointer;background:#f5f4f0">
-          ${heroImg?`<img src="${heroImg}" style="height:60px;object-fit:cover;border-radius:6px;display:block;margin:0 auto 6px"><div style="font-size:11px;color:#6b6a63">${lang==='en'?'Click to replace image':lang==='zht'?'點擊更換圖片':'点击更换图片'}</div>`:`<div style="font-size:12px;color:#6b6a63">${lang==='en'?'Click to upload image (JPG/PNG/WebP)':lang==='zht'?'點擊上傳圖片':'点击上传图片'}</div>`}
-          <input type="file" accept="image/*" style="display:none" onchange="handleHeroImgInline(event)">
-        </label>
-        ${heroImg?`<button class="btn sm d" style="margin-top:6px;width:100%;justify-content:center" onclick="removeHeroImgInline()">${lang==='en'?'Remove image':lang==='zht'?'移除圖片':'移除图片'}</button>`:''}
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+        <div>
+          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Chinese Main</label>
+          <input type="text" id="slide-edit-zh-main" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Chinese Sub</label>
+          <input type="text" id="slide-edit-zh-sub" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
+        </div>
+        <div>
+          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Tag</label>
+          <input type="text" id="slide-edit-zh-tag" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
+        </div>
       </div>
+
       <div style="display:flex;gap:8px">
-        <button class="btn p" style="flex:1;justify-content:center;padding:9px" onclick="saveHeroText()">${lang==='en'?'Save Changes':lang==='zht'?'儲存變更':'保存更改'}</button>
-        <button class="btn" style="justify-content:center;padding:9px" onclick="toggleHeroEdit()">${lang==='en'?'Cancel':lang==='zht'?'取消':'取消'}</button>
+        <button class="btn p" style="flex:1;justify-content:center;padding:10px;font-size:13px" onclick="saveSlideEdit()">Save Changes</button>
+        <button class="btn" style="justify-content:center;padding:10px;font-size:13px" onclick="closeSlideEdit()">Cancel</button>
       </div>
     </div>
-  </div>`:'' ;
+  </div>`:'';
+
+  const adminHeroBar=db.adm?'':'' ;
 
   r.innerHTML=`
     <div class="hero" id="hero-carousel">
       <div class="hero-track" id="hero-track">${slidesHtml}</div>
-      ${adminHeroBar}
+      ${slideEditModal||''}
       <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Previous">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L5 7l4 5"/></svg>
       </button>
@@ -1760,31 +1854,104 @@ function heroGo(idx){
 function heroStep(dir){
   heroGo((_heroIdx+dir+_heroTotal)%_heroTotal);
 }
-function toggleHeroEdit(){
-  const panel=document.getElementById('hero-edit-panel');
-  if(!panel)return;
-  const isOpen=panel.style.display==='flex';
-  panel.style.display=isOpen?'none':'flex';
+// ── Per-slide hero edit ───────────────────────────────────────────────────
+let _editingSlideIdx=null;
+
+function openSlideEdit(i){
+  _editingSlideIdx=i;
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  const s=db.heroSlides[i]||{};
+  const defs=[
+    {title:db.heroTextTitle||'Fresh from the source', sub:db.heroTextSub||'Artisan foods & drinks, delivered to your door', zh_main:'自然生材', zh_sub:'我们崇尚', zh_tag:'菌菇'},
+    {title:'Finest Ingredients', sub:'Carefully sourced, lovingly delivered', zh_main:'魔鬼辣椒', zh_sub:'自然生材', zh_tag:'辣椒'},
+    {title:'Wild & Natural', sub:'Every bite, a gift from nature', zh_main:'小苦瓜', zh_sub:'心向山野', zh_tag:'蔬菜'},
+  ];
+  const d=defs[i]||defs[0];
+  const modal=document.getElementById('slide-edit-modal');
+  if(!modal) return;
+  document.getElementById('slide-edit-title').textContent='Edit Slide '+(i+1)+' · '+(i===0?'Brown':i===1?'Red':'Green');
+  document.getElementById('slide-edit-heading').value=s.title||d.title||'';
+  document.getElementById('slide-edit-sub').value=s.sub||d.sub||'';
+  document.getElementById('slide-edit-zh-main').value=s.zh_main||d.zh_main||'';
+  document.getElementById('slide-edit-zh-sub').value=s.zh_sub||d.zh_sub||'';
+  document.getElementById('slide-edit-zh-tag').value=s.zh_tag||d.zh_tag||'';
+  document.getElementById('slide-edit-msg').innerHTML='';
+  // Image preview
+  const preview=document.getElementById('slide-img-preview');
+  const removeBtn=document.getElementById('slide-img-remove-btn');
+  const uploadLabel=document.getElementById('slide-img-upload-label');
+  if(s.img){
+    preview.innerHTML=`<div style="border-radius:8px;overflow:hidden;margin-bottom:6px;border:.5px solid #dddbd3"><img src="${s.img}" style="width:100%;height:100px;object-fit:cover;display:block"></div>`;
+    removeBtn.style.display='flex';
+    uploadLabel.textContent='Click to replace image';
+  } else {
+    preview.innerHTML='';
+    removeBtn.style.display='none';
+    uploadLabel.textContent='Click to upload image (JPG/PNG/WebP)';
+  }
+  modal.style.display='flex';
 }
-function saveHeroText(){
-  const title=document.getElementById('hero-title-input')?.value.trim();
-  const sub=document.getElementById('hero-sub-input')?.value.trim();
-  if(!title&&!sub){document.getElementById('hero-edit-msg').innerHTML='<div class="m e" style="font-size:12px">Please enter at least a title or subtitle.</div>';return;}
-  if(title)db.heroTextTitle=title;
-  if(sub)db.heroTextSub=sub;
+
+function closeSlideEdit(){
+  const modal=document.getElementById('slide-edit-modal');
+  if(modal) modal.style.display='none';
+  _editingSlideIdx=null;
+}
+
+function saveSlideEdit(){
+  const i=_editingSlideIdx;
+  if(i===null||i===undefined) return;
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  const title=document.getElementById('slide-edit-heading').value.trim();
+  const sub=document.getElementById('slide-edit-sub').value.trim();
+  const zh_main=document.getElementById('slide-edit-zh-main').value.trim();
+  const zh_sub=document.getElementById('slide-edit-zh-sub').value.trim();
+  const zh_tag=document.getElementById('slide-edit-zh-tag').value.trim();
+  const existing=db.heroSlides[i]||{};
+  db.heroSlides[i]={...existing,title,sub,zh_main,zh_sub,zh_tag};
+  // Also update slide 0 fallback values for heroTextTitle/Sub
+  if(i===0){ if(title) db.heroTextTitle=title; if(sub) db.heroTextSub=sub; }
   sv(true);
-  toggleHeroEdit();
+  closeSlideEdit();
   rShop(document.getElementById('root'));
 }
-async function handleHeroImgInline(e){
-  const f=e.target.files[0];if(!f)return;
-  const path=`hero/${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+
+async function handleSlideImg(e){
+  const i=_editingSlideIdx;
+  if(i===null||i===undefined) return;
+  const f=e.target.files[0]; if(!f) return;
+  const msg=document.getElementById('slide-edit-msg');
+  msg.innerHTML='<div class="m i" style="font-size:12px">Uploading…</div>';
+  const path=`hero/slide${i}_${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
   const{data,error}=await _fb.fsdb.storage.from('netiva').upload(path,f,{upsert:true});
-  if(error){alert('Image upload failed: '+error.message+' — Check that the server is running and accessible.');return;}
-  db.heroImage=_fb.fsdb.storage.from('netiva').getPublicUrl(data.path).data.publicUrl;
-  sv(true);rShop(document.getElementById('root'));setTimeout(()=>{const p=document.getElementById('hero-edit-panel');if(p)p.style.display='flex';},50);
+  if(error){ msg.innerHTML=`<div class="m e" style="font-size:12px">Upload failed: ${error.message}</div>`; return; }
+  const url=_fb.fsdb.storage.from('netiva').getPublicUrl(data.path).data.publicUrl;
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  if(!db.heroSlides[i]) db.heroSlides[i]={};
+  db.heroSlides[i].img=url;
+  sv(true);
+  msg.innerHTML='<div class="m s" style="font-size:12px">Image saved!</div>';
+  // Refresh preview
+  const preview=document.getElementById('slide-img-preview');
+  const removeBtn=document.getElementById('slide-img-remove-btn');
+  const uploadLabel=document.getElementById('slide-img-upload-label');
+  if(preview) preview.innerHTML=`<div style="border-radius:8px;overflow:hidden;margin-bottom:6px;border:.5px solid #dddbd3"><img src="${url}" style="width:100%;height:100px;object-fit:cover;display:block"></div>`;
+  if(removeBtn) removeBtn.style.display='flex';
+  if(uploadLabel) uploadLabel.textContent='Click to replace image';
+  // Also re-render hero slide in background
+  rShop(document.getElementById('root'));
+  setTimeout(()=>openSlideEdit(i),60);
 }
-function removeHeroImgInline(){db.heroImage='';sv(true);rShop(document.getElementById('root'));setTimeout(()=>{const p=document.getElementById('hero-edit-panel');if(p)p.style.display='flex';},50);}
+
+function removeSlideImg(){
+  const i=_editingSlideIdx;
+  if(i===null||i===undefined) return;
+  if(!db.heroSlides||!db.heroSlides[i]) return;
+  db.heroSlides[i].img='';
+  sv(true);
+  rShop(document.getElementById('root'));
+  setTimeout(()=>openSlideEdit(i),60);
+}
 function rShopProducts(){
   const grid=document.getElementById('mp');if(!grid)return;
   const filtered=db.products.filter(p=>p.active);

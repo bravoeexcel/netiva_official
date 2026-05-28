@@ -32,22 +32,22 @@
     .nav { display: flex; align-items: center; justify-content: space-between; padding: .875rem 1.5rem; border-bottom: .5px solid var(--color-border-tertiary); background: rgba(250,248,244,0.95); backdrop-filter: blur(8px); gap: 8px; position: sticky; top: 0; z-index: 50; transition: background .3s, border-color .3s; }
     .nav.nav-hero { position: fixed; width: 100%; background: transparent; border-bottom-color: transparent; backdrop-filter: none; }
     .logo { font-size: 18px; font-weight: 600; cursor: pointer; letter-spacing: -.5px; flex-shrink: 0; color: var(--color-text-primary); transition: color .3s; }
-    .nav.nav-hero .logo { color: #e8c99a; }
+    .nav.nav-hero .logo { color: rgba(248,245,238,0.95); }
     .nav-c { display: flex; gap: 1.5rem; }
     .nav-c a { font-size: 13px; color: var(--color-text-secondary); cursor: pointer; text-decoration: none; }
     .nav-c a:hover { color: var(--color-text-primary); }
     .nav-r { display: flex; align-items: center; gap: 8px; }
     .rate-chip { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; background: var(--color-background-secondary); border: .5px solid var(--color-border-secondary); border-radius: 999px; padding: 3px 10px; color: var(--color-text-secondary); transition: background .3s, border-color .3s, color .3s; }
-    .nav.nav-hero .rate-chip { background: rgba(232,201,154,0.12); border-color: rgba(232,201,154,0.3); color: #e8c99a; }
-    .nav.nav-hero .rate-dot { background: rgba(232,201,154,0.55); }
+    .nav.nav-hero .rate-chip { background: rgba(248,245,238,0.1); border-color: rgba(248,245,238,0.25); color: rgba(248,245,238,0.88); }
+    .nav.nav-hero .rate-dot { background: rgba(248,245,238,0.45); }
     .nav.nav-hero .rate-dot.live { background: #9de86a; }
-    .nav.nav-hero .nav-link-btn, .nav.nav-hero .lang-dd-btn, .nav.nav-hero #nav-shop, .nav.nav-hero #nav-admin, .nav.nav-hero #lang-label { color: rgba(232,201,154,0.92); }
-    .nav.nav-hero .nav-link-btn:hover, .nav.nav-hero .lang-dd-btn:hover, .nav.nav-hero #nav-shop:hover, .nav.nav-hero #nav-admin:hover { color: #f2e0bc; }
-    .nav.nav-hero .btn { color: rgba(232,201,154,0.92); border-color: rgba(232,201,154,0.35); background: rgba(232,201,154,0.08); }
-    .nav.nav-hero .btn:hover { background: rgba(232,201,154,0.18); border-color: rgba(232,201,154,0.55); color: #f2e0bc; }
-    .nav.nav-hero .btn.p { background: rgba(232,201,154,0.88); color: #2a1a08; border-color: transparent; }
-    .nav.nav-hero .btn.p:hover { background: #e8c99a; }
-    .nav.nav-hero .mob-menu-btn { color: #e8c99a; border-color: rgba(232,201,154,0.35); background: rgba(232,201,154,0.08); }
+    .nav.nav-hero .nav-link-btn, .nav.nav-hero .lang-dd-btn, .nav.nav-hero #nav-shop, .nav.nav-hero #nav-admin, .nav.nav-hero #lang-label { color: rgba(248,245,238,0.88); }
+    .nav.nav-hero .nav-link-btn:hover, .nav.nav-hero .lang-dd-btn:hover, .nav.nav-hero #nav-shop:hover, .nav.nav-hero #nav-admin:hover { color: #fff; }
+    .nav.nav-hero .btn { color: rgba(248,245,238,0.88); border-color: rgba(248,245,238,0.3); background: rgba(248,245,238,0.08); }
+    .nav.nav-hero .btn:hover { background: rgba(248,245,238,0.16); border-color: rgba(248,245,238,0.5); color: #fff; }
+    .nav.nav-hero .btn.p { background: rgba(248,245,238,0.92); color: #1c1a16; border-color: transparent; }
+    .nav.nav-hero .btn.p:hover { background: #fff; }
+    .nav.nav-hero .mob-menu-btn { color: rgba(248,245,238,0.88); border-color: rgba(248,245,238,0.3); background: rgba(248,245,238,0.08); }
     .rate-dot { width: 6px; height: 6px; border-radius: 50%; background: #d4a96a; flex-shrink: 0; }
     .rate-dot.live { background: #7aab4e; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
@@ -105,33 +105,32 @@
     .hero-zh-tag { writing-mode: vertical-rl; text-orientation: mixed; font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 3px; border: .5px solid rgba(255,255,255,0.3); padding: 6px 4px; border-radius: 3px; }
     .hero-zh-divider { width: .5px; height: 40px; background: rgba(255,255,255,0.25); margin: 4px 0; }
 
-    /* Grain texture overlay — CSS-only, no SVG data URI issues */
+    /* Papery grain texture overlay */
     .hero-grain {
       position: absolute; inset: 0; z-index: 1; pointer-events: none;
-      opacity: 0.06; mix-blend-mode: overlay;
-      background-image: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 2px,
-        rgba(255,255,255,0.03) 2px,
-        rgba(255,255,255,0.03) 4px
-      ),
-      repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 3px,
-        rgba(255,255,255,0.02) 3px,
-        rgba(255,255,255,0.02) 6px
-      );
-      background-size: 6px 6px;
+      opacity: 0.55; mix-blend-mode: multiply;
+      background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+      background-size: 300px 300px;
     }
     .hero-grain::after {
       content: ''; position: absolute; inset: 0;
-      background: radial-gradient(ellipse at 30% 70%, rgba(255,255,255,0.06) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 20%, rgba(255,255,255,0.04) 0%, transparent 50%);
+      background: radial-gradient(ellipse at 25% 75%, rgba(255,255,255,0.07) 0%, transparent 55%),
+                  radial-gradient(ellipse at 75% 20%, rgba(255,255,255,0.04) 0%, transparent 45%);
     }
-    .hero-grain-red { opacity: 0.07; }
-    .hero-grain-green { opacity: 0.05; }
+    .hero-grain-red { opacity: 0.48; }
+    .hero-grain-green { opacity: 0.42; }
+
+    /* SVG hero art — right side illustration */
+    .hero-art-svg {
+      position: absolute; right: 0; bottom: 0; z-index: 2;
+      width: 420px; height: 100%; pointer-events: none;
+      display: flex; align-items: flex-end; justify-content: flex-end;
+      padding-right: 2.5rem; padding-bottom: 5rem;
+    }
+    .hero-art-svg svg { display: block; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.45)); }
+    @media (max-width: 768px) { .hero-art-svg { width: 260px; opacity: 0.8; padding-right: 1rem; } }
+    @media (max-width: 480px) { .hero-art-svg { width: 200px; opacity: 0.65; padding-right: 0.5rem; } }
 
     /* Admin edit button on each slide */
     .hero-slide-edit-btn {
@@ -143,83 +142,6 @@
       transition: background .15s;
     }
     .hero-slide-edit-btn:hover { background: #fff; }
-
-    /* Chili silhouette art for the red slide */
-    .hero-chili-art {
-      position: absolute; right: 4rem; top: 50%; transform: translateY(-55%);
-      z-index: 1; width: 180px; height: 340px; pointer-events: none; opacity: 0.15;
-      background:
-        radial-gradient(ellipse 18px 90px at 90px 150px, #e03020 0%, transparent 100%),
-        radial-gradient(ellipse 14px 70px at 110px 170px, #c01808 0%, transparent 100%),
-        radial-gradient(ellipse 12px 50px at 75px 200px, #d02818 0%, transparent 100%),
-        radial-gradient(ellipse 10px 30px at 95px 240px, #b01010 0%, transparent 100%);
-    }
-    .hero-chili-art::before {
-      content:''; position:absolute; inset:0; pointer-events:none;
-      background:
-        radial-gradient(ellipse 8px 8px at 90px 80px, #c8b080 0%, transparent 100%),
-        radial-gradient(ellipse 6px 6px at 96px 72px, #a08040 0%, transparent 100%),
-        radial-gradient(ellipse 3px 3px at 92px 66px, #806020 0%, transparent 100%);
-    }
-    .hero-chili-art::after {
-      content:''; position:absolute; inset:0; pointer-events:none;
-      background:
-        radial-gradient(ellipse 40px 10px at 50px 310px, rgba(0,0,0,0.25) 0%, transparent 100%),
-        radial-gradient(ellipse 30px 8px at 130px 330px, rgba(0,0,0,0.18) 0%, transparent 100%);
-    }
-
-    /* Leaf/vegetable silhouette art for the green slide */
-    .hero-leaf-art {
-      position: absolute; right: 3.5rem; bottom: 80px; z-index: 1;
-      width: 220px; height: 280px; pointer-events: none; opacity: 0.14;
-      background:
-        radial-gradient(ellipse 70px 40px at 110px 100px, #3a8a20 0%, transparent 100%),
-        radial-gradient(ellipse 55px 32px at 80px 140px, #2a7010 0%, transparent 100%),
-        radial-gradient(ellipse 50px 28px at 140px 160px, #3a8a20 0%, transparent 100%),
-        radial-gradient(ellipse 40px 22px at 90px 200px, #226010 0%, transparent 100%),
-        radial-gradient(ellipse 35px 20px at 130px 220px, #2a7018 0%, transparent 100%);
-    }
-    .hero-leaf-art::after {
-      content:''; position:absolute; inset:0; pointer-events:none;
-      background:
-        radial-gradient(ellipse 60px 12px at 100px 268px, rgba(0,0,0,0.3) 0%, transparent 100%);
-    }
-
-    /* Mushroom silhouette art for the brown slide */
-    .hero-mushroom-art {
-      position: absolute; right: 5.5rem; bottom: 0; z-index: 1;
-      width: 260px; height: 380px; pointer-events: none; opacity: 0.18;
-      background:
-        /* Large mushroom cap */
-        radial-gradient(ellipse 110px 28px at 130px 148px, #c9923a 0%, transparent 100%),
-        radial-gradient(ellipse 90px 22px at 130px 142px, #a06820 0%, transparent 100%),
-        /* Large mushroom stem */
-        linear-gradient(to bottom, #b8803a 0%, #8a5e1a 100%),
-        /* Stem shape via clip — done with box-shadow trick */
-        radial-gradient(ellipse 100px 16px at 130px 370px, rgba(0,0,0,0.3) 0%, transparent 100%);
-    }
-    .hero-mushroom-art::before {
-      content: ''; position: absolute; inset: 0;
-      background:
-        /* Left small mushroom cap */
-        radial-gradient(ellipse 55px 16px at 48px 238px, #c9923a 0%, transparent 100%),
-        radial-gradient(ellipse 44px 12px at 48px 232px, #9a6218 0%, transparent 100%),
-        /* Right small mushroom cap */
-        radial-gradient(ellipse 50px 14px at 210px 256px, #c9923a 0%, transparent 100%),
-        radial-gradient(ellipse 40px 11px at 210px 251px, #9a6218 0%, transparent 100%);
-      pointer-events: none;
-    }
-    .hero-mushroom-art::after {
-      content: ''; position: absolute; inset: 0;
-      /* Spore dots scattered */
-      background:
-        radial-gradient(circle 3px at 90px 310px, rgba(255,255,255,0.4) 0%, transparent 100%),
-        radial-gradient(circle 2px at 170px 290px, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(circle 2px at 50px 350px, rgba(255,255,255,0.25) 0%, transparent 100%),
-        radial-gradient(circle 3px at 220px 340px, rgba(255,255,255,0.3) 0%, transparent 100%),
-        radial-gradient(circle 2px at 130px 260px, rgba(255,255,255,0.2) 0%, transparent 100%);
-      pointer-events: none;
-    }
 
     /* No-img fallback */
     .hero.no-img .hero-content h1 { color: var(--color-text-primary); }
@@ -1646,9 +1568,16 @@ function renderCartDrawer(){
 function changeQty(key,delta){const ex=cart.find(x=>x.cartKey===key);if(!ex)return;ex.qty+=delta;if(ex.qty<=0)cart=cart.filter(x=>x.cartKey!==key);rNav();renderCartDrawer();}
 
 function rNav(){
-  // Toggle transparent hero nav on shop page only
+  // Toggle transparent hero nav on shop page only — scroll position determines final state
   const navEl=document.querySelector('.nav');
-  if(navEl){ if(vw==='shop'){ navEl.classList.add('nav-hero'); } else { navEl.classList.remove('nav-hero'); } }
+  if(navEl){
+    if(vw==='shop'){
+      navEl.classList.add('nav-hero'); // default on until scroll check runs
+    } else {
+      navEl.classList.remove('nav-hero');
+      window.removeEventListener('scroll',window._navScrollHandler);
+    }
+  }
   const nr=document.getElementById('nr');if(!nr)return;
   const nrMob=document.getElementById('nr-mob');
   const mobAuth=document.getElementById('mob-nav-auth');
@@ -1703,23 +1632,272 @@ function rShop(r){
   const SLIDES=SLIDE_DEFS.map((def,i)=>({...def,...(db.heroSlides[i]||{})}));
 
   // Theme: solid colour bg + CSS grain texture + artwork layer. No photo unless admin uploads one.
-  const THEME_BG={ brown:'linear-gradient(135deg,#5c3418 0%,#2a1408 50%,#1a0c04 100%)', red:'linear-gradient(135deg,#7a1a0a 0%,#4a0808 50%,#2a0404 100%)', green:'linear-gradient(135deg,#1e4a10 0%,#0f2e0a 50%,#081a04 100%)' };
+  const THEME_BG={
+    brown:'linear-gradient(160deg,#6b4020 0%,#3d1e0a 35%,#1e0e04 65%,#2a1508 100%)',
+    red:'linear-gradient(160deg,#8c1a0c 0%,#5a0a0a 35%,#2e0404 65%,#4a0c08 100%)',
+    green:'linear-gradient(160deg,#2a5a14 0%,#163610 35%,#081804 65%,#0f2808 100%)'
+  };
+  const SVG_MUSHROOM=`<svg width="320" height="420" viewBox="0 0 320 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="capGrad" cx="50%" cy="40%" r="55%">
+        <stop offset="0%" stop-color="#e8b870"/>
+        <stop offset="45%" stop-color="#c4883a"/>
+        <stop offset="100%" stop-color="#7a4e18"/>
+      </radialGradient>
+      <radialGradient id="capGrad2" cx="50%" cy="38%" r="55%">
+        <stop offset="0%" stop-color="#d4a060"/>
+        <stop offset="50%" stop-color="#a86a28"/>
+        <stop offset="100%" stop-color="#6a3e10"/>
+      </radialGradient>
+      <radialGradient id="capGrad3" cx="45%" cy="35%" r="60%">
+        <stop offset="0%" stop-color="#f0c880"/>
+        <stop offset="40%" stop-color="#d09040"/>
+        <stop offset="100%" stop-color="#805020"/>
+      </radialGradient>
+      <radialGradient id="stemGrad" cx="35%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#d4a060"/>
+        <stop offset="100%" stop-color="#8a5a20"/>
+      </radialGradient>
+      <radialGradient id="gillGrad" cx="50%" cy="0%" r="100%">
+        <stop offset="0%" stop-color="rgba(255,220,160,0.7)"/>
+        <stop offset="100%" stop-color="rgba(160,100,40,0.2)"/>
+      </radialGradient>
+      <filter id="mush-blur"><feGaussianBlur stdDeviation="1.5"/></filter>
+      <filter id="soft-shadow"><feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="rgba(30,12,2,0.6)"/></filter>
+    </defs>
+    <!-- Ground shadow -->
+    <ellipse cx="155" cy="415" rx="110" ry="12" fill="rgba(0,0,0,0.35)" filter="url(#mush-blur)"/>
+    <!-- Small back-left mushroom -->
+    <g opacity="0.7">
+      <path d="M52 310 Q48 285 50 268 Q52 258 58 255 Q64 252 68 258 Q72 265 70 285 L68 310Z" fill="url(#stemGrad)"/>
+      <ellipse cx="60" cy="255" rx="28" ry="12" fill="url(#capGrad2)" transform="rotate(-8,60,255)"/>
+      <path d="M32 258 Q40 240 60 236 Q80 240 88 258 Q80 270 60 272 Q40 270 32 258Z" fill="url(#capGrad2)"/>
+      <path d="M38 260 Q45 272 60 274 Q75 272 82 260 Q75 268 60 270 Q45 268 38 260Z" fill="url(#gillGrad)" opacity="0.6"/>
+    </g>
+    <!-- Small right mushroom -->
+    <g opacity="0.65">
+      <path d="M248 330 Q244 305 246 285 Q248 274 255 270 Q262 267 266 274 Q270 282 268 305 L266 330Z" fill="url(#stemGrad)"/>
+      <path d="M222 272 Q232 252 255 248 Q278 252 288 272 Q278 286 255 288 Q232 286 222 272Z" fill="url(#capGrad3)"/>
+      <path d="M228 274 Q238 288 255 290 Q272 288 282 274 Q272 282 255 284 Q238 282 228 274Z" fill="url(#gillGrad)" opacity="0.55"/>
+    </g>
+    <!-- Main large mushroom -->
+    <g filter="url(#soft-shadow)">
+      <!-- Stem -->
+      <path d="M122 410 Q118 360 120 320 Q122 295 132 282 Q140 272 155 270 Q170 270 178 282 Q188 295 190 320 Q192 360 188 410Z" fill="url(#stemGrad)"/>
+      <!-- Stem highlight -->
+      <path d="M130 400 Q126 355 128 318 Q130 297 138 286 Q144 278 152 276 Q144 285 140 300 Q136 325 136 370 L132 400Z" fill="rgba(255,200,120,0.2)"/>
+      <!-- Stem ring/skirt -->
+      <ellipse cx="155" cy="310" rx="38" ry="8" fill="rgba(200,140,60,0.4)" transform="rotate(-2,155,310)"/>
+      <!-- Cap underside / gills -->
+      <path d="M60 195 Q90 215 155 220 Q220 215 250 195 Q230 230 155 235 Q80 230 60 195Z" fill="url(#gillGrad)"/>
+      <!-- Cap main -->
+      <path d="M48 190 Q72 140 120 118 Q140 110 155 108 Q170 110 190 118 Q238 140 262 190 Q240 210 155 215 Q70 210 48 190Z" fill="url(#capGrad)"/>
+      <!-- Cap top highlight -->
+      <path d="M100 128 Q120 112 155 108 Q190 112 210 128 Q190 118 155 116 Q120 118 100 128Z" fill="rgba(255,220,160,0.3)"/>
+      <!-- Spots on cap -->
+      <circle cx="130" cy="148" r="9" fill="rgba(255,235,180,0.45)"/>
+      <circle cx="170" cy="138" r="7" fill="rgba(255,235,180,0.38)"/>
+      <circle cx="155" cy="162" r="6" fill="rgba(255,235,180,0.32)"/>
+      <circle cx="110" cy="162" r="5" fill="rgba(255,235,180,0.28)"/>
+      <circle cx="200" cy="158" r="6" fill="rgba(255,235,180,0.3)"/>
+      <circle cx="142" cy="125" r="4" fill="rgba(255,235,180,0.25)"/>
+    </g>
+    <!-- Tiny spores floating -->
+    <circle cx="80" cy="120" r="3" fill="rgba(255,210,140,0.5)"/>
+    <circle cx="230" cy="100" r="2" fill="rgba(255,210,140,0.4)"/>
+    <circle cx="60" cy="180" r="2" fill="rgba(255,210,140,0.35)"/>
+    <circle cx="270" cy="160" r="2.5" fill="rgba(255,210,140,0.38)"/>
+    <circle cx="180" cy="80" r="2" fill="rgba(255,210,140,0.3)"/>
+    <circle cx="100" cy="90" r="1.5" fill="rgba(255,210,140,0.3)"/>
+  </svg>`;
+
+  const SVG_ROSE=`<svg width="300" height="400" viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="petalMain" cx="50%" cy="60%" r="55%">
+        <stop offset="0%" stop-color="#f5c0c0"/>
+        <stop offset="50%" stop-color="#e07070"/>
+        <stop offset="100%" stop-color="#a03040"/>
+      </radialGradient>
+      <radialGradient id="petalInner" cx="45%" cy="55%" r="50%">
+        <stop offset="0%" stop-color="#fadadc"/>
+        <stop offset="60%" stop-color="#e88888"/>
+        <stop offset="100%" stop-color="#c04858"/>
+      </radialGradient>
+      <radialGradient id="petalDeep" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e09090"/>
+        <stop offset="100%" stop-color="#801830"/>
+      </radialGradient>
+      <radialGradient id="leafGrad" cx="30%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#5a8c30"/>
+        <stop offset="100%" stop-color="#2a4a10"/>
+      </radialGradient>
+      <radialGradient id="petalBud" cx="50%" cy="40%" r="55%">
+        <stop offset="0%" stop-color="#f0b0b0"/>
+        <stop offset="100%" stop-color="#b04060"/>
+      </radialGradient>
+      <filter id="rose-glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="petal-shadow"><feDropShadow dx="1" dy="2" stdDeviation="3" flood-color="rgba(100,20,30,0.3)"/></filter>
+    </defs>
+    <!-- Ground shadow -->
+    <ellipse cx="148" cy="398" rx="80" ry="9" fill="rgba(0,0,0,0.3)"/>
+    <!-- Stems -->
+    <path d="M148 395 Q145 350 142 310 Q140 280 135 260 Q130 240 125 220" stroke="#3a6018" stroke-width="4" stroke-linecap="round" fill="none"/>
+    <path d="M148 395 Q152 345 158 300 Q163 270 168 248" stroke="#3a6018" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+    <path d="M140 395 Q136 355 132 320 Q128 295 122 275 Q118 258 115 240" stroke="#4a7020" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <!-- Thorns -->
+    <path d="M138 340 Q130 335 134 328" stroke="#2a5010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <path d="M155 310 Q163 305 160 297" stroke="#2a5010" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <!-- Leaves -->
+    <g fill="url(#leafGrad)">
+      <path d="M125 222 Q110 200 95 195 Q100 215 118 228 Q122 226 125 222Z"/>
+      <path d="M125 222 Q118 205 122 188 Q130 200 128 220Z" opacity="0.7"/>
+      <path d="M115 242 Q96 232 80 235 Q88 250 112 248Z"/>
+      <path d="M168 250 Q185 235 200 238 Q192 255 170 252Z"/>
+      <path d="M133 285 Q115 278 100 283 Q110 296 135 290Z"/>
+      <path d="M160 268 Q178 258 192 263 Q184 278 162 272Z"/>
+    </g>
+    <!-- Leaf veins -->
+    <path d="M95 195 Q108 210 122 225" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" fill="none"/>
+    <path d="M80 235 Q96 242 114 246" stroke="rgba(255,255,255,0.2)" stroke-width="0.7" fill="none"/>
+    <!-- Bud (right stem) -->
+    <g transform="translate(168,248)">
+      <path d="M0 0 Q-10-20 0-38 Q10-20 0 0Z" fill="#3a6018"/>
+      <path d="M0 0 Q-8-18 0-35 Q8-18 0 0Z" fill="#4a8020" opacity="0.7"/>
+      <ellipse cx="0" cy="-38" rx="14" ry="18" fill="url(#petalBud)"/>
+      <path d="M-14-38 Q-10-55 0-60 Q10-55 14-38 Q8-30 0-28 Q-8-30-14-38Z" fill="url(#petalBud)"/>
+      <path d="M-6-62 Q0-68 6-62 Q4-56 0-54 Q-4-56-6-62Z" fill="#fadadc"/>
+    </g>
+    <!-- Main rose (left-center) -->
+    <g transform="translate(125,155)" filter="url(#petal-shadow)">
+      <!-- Outer petals -->
+      <path d="M0 0 Q-42-8-50-28 Q-40-48-20-50 Q-4-50 0 0Z" fill="url(#petalMain)" opacity="0.9"/>
+      <path d="M0 0 Q-18-48-4-65 Q14-72 26-58 Q34-44 0 0Z" fill="url(#petalMain)" opacity="0.85"/>
+      <path d="M0 0 Q30-42 52-32 Q60-12 48 8 Q36 20 0 0Z" fill="url(#petalMain)" opacity="0.9"/>
+      <path d="M0 0 Q28 30 20 52 Q6 64-14 58 Q-32 48-22 22 Q-14 8 0 0Z" fill="url(#petalMain)" opacity="0.88"/>
+      <path d="M0 0 Q-28 22-42 10 Q-52-8-42-26 Q-32-44-14-36 Q-6-28 0 0Z" fill="url(#petalDeep)" opacity="0.8"/>
+      <!-- Mid petals -->
+      <path d="M0 0 Q-28-4-30-22 Q-22-38-8-34 Q0-28 0 0Z" fill="url(#petalInner)"/>
+      <path d="M0 0 Q-4-32 10-38 Q24-38 26-20 Q24-6 0 0Z" fill="url(#petalInner)"/>
+      <path d="M0 0 Q22-10 28 4 Q28 20 14 26 Q2 26 0 0Z" fill="url(#petalInner)"/>
+      <path d="M0 0 Q14 22 4 34 Q-10 38-22 26 Q-28 12-14 4 Q-6 0 0 0Z" fill="url(#petalInner)"/>
+      <!-- Inner spiral -->
+      <path d="M0 0 Q-14 2-14-12 Q-12-22-2-20 Q6-18 6-8 Q6 0 0 0Z" fill="#e88888"/>
+      <path d="M0 0 Q6-12 14-8 Q16 2 10 8 Q4 10 0 0Z" fill="#d06878"/>
+      <circle cx="0" cy="-4" r="8" fill="#c05068"/>
+      <circle cx="0" cy="-4" r="4" fill="#a03050"/>
+    </g>
+    <!-- Second rose (upper right) -->
+    <g transform="translate(195,110) rotate(15)" opacity="0.85">
+      <path d="M0 0 Q-32-6-36-22 Q-28-36-12-36 Q-2-34 0 0Z" fill="url(#petalMain)"/>
+      <path d="M0 0 Q-10-36-2-46 Q10-50 18-38 Q22-28 0 0Z" fill="url(#petalMain)"/>
+      <path d="M0 0 Q24-30 38-18 Q42-4 32 10 Q22 18 0 0Z" fill="url(#petalMain)"/>
+      <path d="M0 0 Q20 22 12 36 Q2 44-12 38 Q-22 28-14 14 Q-8 4 0 0Z" fill="url(#petalMain)"/>
+      <path d="M0 0 Q-20 14-28 4 Q-34-10-24-22 Q-16-30-6-22 Q0-14 0 0Z" fill="url(#petalDeep)"/>
+      <path d="M0 0 Q-18-2-18-14 Q-14-24 -2-20 Q4-16 0 0Z" fill="url(#petalInner)"/>
+      <path d="M0 0 Q2-20 12-22 Q20-20 18-8 Q14-2 0 0Z" fill="url(#petalInner)"/>
+      <path d="M0 0 Q16-4 18 8 Q14 18 4 16 Q-2 12 0 0Z" fill="url(#petalInner)"/>
+      <circle cx="0" cy="-2" r="7" fill="#c05068"/>
+      <circle cx="0" cy="-2" r="3.5" fill="#902840"/>
+    </g>
+    <!-- Petals scattering -->
+    <path d="M62 350 Q58 338 66 332 Q74 334 72 344 Q70 352 62 350Z" fill="rgba(224,112,112,0.55)" transform="rotate(-20,62,340)"/>
+    <path d="M200 370 Q196 360 204 355 Q210 357 208 366 Q206 373 200 370Z" fill="rgba(220,100,110,0.45)" transform="rotate(15,200,362)"/>
+    <path d="M85 380 Q82 372 89 368 Q95 370 93 378 Q91 384 85 380Z" fill="rgba(230,120,120,0.4)" transform="rotate(30,85,376)"/>
+  </svg>`;
+
+  const SVG_LEAF=`<svg width="320" height="420" viewBox="0 0 320 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="leaf1" cx="35%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#7bc44a"/>
+        <stop offset="55%" stop-color="#4a8c20"/>
+        <stop offset="100%" stop-color="#246010"/>
+      </radialGradient>
+      <radialGradient id="leaf2" cx="60%" cy="35%" r="60%">
+        <stop offset="0%" stop-color="#90d458"/>
+        <stop offset="50%" stop-color="#5aa428"/>
+        <stop offset="100%" stop-color="#2c6010"/>
+      </radialGradient>
+      <radialGradient id="leaf3" cx="40%" cy="45%" r="65%">
+        <stop offset="0%" stop-color="#68b83a"/>
+        <stop offset="55%" stop-color="#3a7818"/>
+        <stop offset="100%" stop-color="#1c4808"/>
+      </radialGradient>
+      <radialGradient id="bittermelon" cx="30%" cy="40%" r="65%">
+        <stop offset="0%" stop-color="#8acc50"/>
+        <stop offset="50%" stop-color="#50961e"/>
+        <stop offset="100%" stop-color="#286010"/>
+      </radialGradient>
+      <filter id="leaf-shadow"><feDropShadow dx="2" dy="6" stdDeviation="8" flood-color="rgba(10,40,5,0.5)"/></filter>
+      <filter id="leaf-blur"><feGaussianBlur stdDeviation="1"/></filter>
+    </defs>
+    <!-- Ground shadow -->
+    <ellipse cx="155" cy="415" rx="120" ry="11" fill="rgba(0,0,0,0.32)"/>
+    <!-- Large back leaf -->
+    <g filter="url(#leaf-shadow)" opacity="0.75">
+      <path d="M60 390 Q55 340 62 295 Q70 255 90 225 Q110 198 135 188 Q155 182 162 190 Q148 205 135 228 Q115 260 102 300 Q88 342 82 390Z" fill="url(#leaf3)"/>
+      <path d="M162 190 Q170 195 165 210 Q155 230 140 255 Q120 285 105 320 Q90 355 86 390 L82 390 Q88 342 102 300 Q115 260 135 228 Q148 205 162 190Z" fill="rgba(255,255,255,0.1)"/>
+      <!-- Vein -->
+      <path d="M162 190 Q148 215 132 248 Q115 285 102 328 Q90 365 84 390" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" fill="none"/>
+      <path d="M125 240 Q112 238 102 245" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+      <path d="M118 268 Q104 265 95 272" stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none"/>
+    </g>
+    <!-- Bitter melon / ribbed veggie (main feature) -->
+    <g filter="url(#leaf-shadow)">
+      <!-- Body -->
+      <path d="M128 395 Q118 365 115 330 Q112 295 116 262 Q120 232 130 212 Q140 195 152 192 Q164 195 172 215 Q180 238 182 272 Q184 308 178 345 Q172 375 162 395Z" fill="url(#bittermelon)"/>
+      <!-- Ribs / bumps texture -->
+      <path d="M126 380 Q120 355 118 325 Q116 295 120 265 Q124 238 133 218" stroke="rgba(255,255,255,0.18)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M138 393 Q132 365 130 335 Q128 300 132 268 Q136 240 144 220 Q150 205 155 200" stroke="rgba(255,255,255,0.22)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M150 395 Q146 368 145 338 Q144 305 147 275 Q150 248 157 228 Q162 212 168 205" stroke="rgba(255,255,255,0.2)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M162 393 Q160 368 160 338 Q160 305 162 275 Q165 245 170 222" stroke="rgba(255,255,255,0.16)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <!-- Bumps as ellipses -->
+      <ellipse cx="134" cy="300" rx="5" ry="8" fill="rgba(255,255,255,0.12)" transform="rotate(-5,134,300)"/>
+      <ellipse cx="148" cy="280" rx="5" ry="8" fill="rgba(255,255,255,0.1)" transform="rotate(5,148,280)"/>
+      <ellipse cx="162" cy="295" rx="4" ry="7" fill="rgba(255,255,255,0.1)" transform="rotate(-3,162,295)"/>
+      <ellipse cx="138" cy="338" rx="5" ry="8" fill="rgba(255,255,255,0.1)"/>
+      <ellipse cx="155" cy="345" rx="4" ry="7" fill="rgba(255,255,255,0.09)"/>
+      <ellipse cx="168" cy="325" rx="4" ry="7" fill="rgba(255,255,255,0.09)"/>
+      <!-- Tip -->
+      <path d="M128 395 Q138 408 148 412 Q158 408 162 395Z" fill="#3a7818"/>
+      <!-- Stem top -->
+      <path d="M148 192 Q148 180 145 168 Q146 160 152 158 Q158 160 157 168 Q155 180 154 192Z" stroke="#2a6010" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <!-- Tendril -->
+      <path d="M148 175 Q138 168 130 172 Q122 178 124 188" stroke="#3a7018" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M148 168 Q158 160 168 165 Q176 172 172 182" stroke="#3a7018" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </g>
+    <!-- Right leaf cluster -->
+    <g filter="url(#leaf-shadow)" opacity="0.82">
+      <path d="M195 400 Q198 355 210 318 Q222 280 242 252 Q258 228 272 220 Q282 220 285 230 Q270 245 255 270 Q236 300 224 335 Q212 370 208 400Z" fill="url(#leaf1)"/>
+      <path d="M285 230 Q280 248 268 270 Q250 298 235 330 Q220 362 212 400 L208 400 Q212 370 224 335 Q236 300 255 270 Q270 245 285 230Z" fill="rgba(255,255,255,0.1)"/>
+      <path d="M285 230 Q272 252 255 278 Q235 310 222 348 Q212 378 210 400" stroke="rgba(255,255,255,0.22)" stroke-width="1.5" fill="none"/>
+    </g>
+    <!-- Small leaf detail top-right -->
+    <g opacity="0.65">
+      <path d="M235 180 Q248 165 262 162 Q272 168 268 182 Q258 195 240 192 Q234 188 235 180Z" fill="url(#leaf2)"/>
+      <path d="M235 180 Q242 172 255 170 Q265 174 262 182" stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none"/>
+    </g>
+    <!-- Water droplets -->
+    <ellipse cx="175" cy="248" rx="3" ry="4" fill="rgba(180,240,180,0.55)" transform="rotate(15,175,248)"/>
+    <ellipse cx="162" cy="335" rx="2.5" ry="3.5" fill="rgba(180,240,180,0.45)" transform="rotate(-10,162,335)"/>
+    <ellipse cx="140" cy="310" rx="2" ry="3" fill="rgba(180,240,180,0.4)"/>
+  </svg>`;
+
   const THEME_OVERLAYS={
     brown:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.35">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(42,26,10,0.82) 0%,rgba(70,38,12,0.6) 100%)"></div>
+      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)"></div>
       <div class="hero-grain"></div>
-      <div class="hero-mushroom-art"></div>`,
+      <div class="hero-art-svg">${SVG_MUSHROOM}</div>`,
     red:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.3">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(90,12,12,0.9) 0%,rgba(140,28,18,0.75) 100%)"></div>
+      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)"></div>
       <div class="hero-grain hero-grain-red"></div>
-      <div class="hero-chili-art"></div>`,
+      <div class="hero-art-svg">${SVG_ROSE}</div>`,
     green:(img)=>`
       ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.28">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(135deg,rgba(18,45,18,0.92) 0%,rgba(32,72,22,0.78) 100%)"></div>
+      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)"></div>
       <div class="hero-grain hero-grain-green"></div>
-      <div class="hero-leaf-art"></div>`,
+      <div class="hero-art-svg">${SVG_LEAF}</div>`,
   };
 
   const slidesHtml=SLIDES.map((s,i)=>{
@@ -1753,53 +1931,98 @@ function rShop(r){
 
   const dotsHtml=SLIDES.map((_,i)=>`<button class="hero-dot${i===0?' on':''}" onclick="heroGo(${i})" aria-label="Slide ${i+1}"></button>`).join('');
 
-  // Per-slide edit modal (hidden by default, shown by openSlideEdit(i))
+  // Per-slide edit drawer (hidden by default, shown by openSlideEdit(i))
   const slideEditModal=db.adm?`
-  <div id="slide-edit-modal" style="display:none;position:absolute;inset:0;z-index:20;background:rgba(0,0,0,.65);backdrop-filter:blur(3px);align-items:center;justify-content:center;padding:1.5rem">
-    <div style="background:#fff;border-radius:14px;padding:1.5rem;width:100%;max-width:500px;box-shadow:0 12px 48px rgba(0,0,0,.28);max-height:90vh;overflow-y:auto">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem">
-        <div style="font-size:15px;font-weight:600" id="slide-edit-title">Edit Slide</div>
-        <button onclick="closeSlideEdit()" style="background:none;border:none;cursor:pointer;font-size:22px;color:#6b6a63;line-height:1;padding:0 4px">×</button>
-      </div>
-      <div id="slide-edit-msg"></div>
-
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#a39c8f;margin-bottom:10px">Overlay Image (optional)</div>
-      <div id="slide-img-preview" style="margin-bottom:8px"></div>
-      <label style="display:block;border:.5px dashed #dddbd3;border-radius:10px;padding:12px;text-align:center;cursor:pointer;background:#f9f8f5;margin-bottom:8px">
-        <div style="font-size:12px;color:#6b6a63" id="slide-img-upload-label">Click to upload image (JPG/PNG/WebP)</div>
-        <input type="file" accept="image/*" style="display:none" onchange="handleSlideImg(event)">
-      </label>
-      <button id="slide-img-remove-btn" class="btn sm d" style="width:100%;justify-content:center;margin-bottom:14px;display:none" onclick="removeSlideImg()">Remove image</button>
-
-      <div style="height:.5px;background:#ece7dd;margin-bottom:14px"></div>
-      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:#a39c8f;margin-bottom:10px">Text Content</div>
-
-      <div style="margin-bottom:10px">
-        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Title</label>
-        <input type="text" id="slide-edit-heading" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:14px;font-weight:500">
-      </div>
-      <div style="margin-bottom:10px">
-        <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Subtitle</label>
-        <textarea id="slide-edit-sub" rows="2" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px;resize:vertical;font-family:inherit"></textarea>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px">
+  <div id="slide-edit-modal" style="display:none;position:fixed;inset:0;z-index:200;pointer-events:none">
+    <!-- Backdrop -->
+    <div id="slide-edit-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(2px);pointer-events:all;opacity:0;transition:opacity .25s" onclick="closeSlideEdit()"></div>
+    <!-- Drawer -->
+    <div id="slide-edit-drawer" style="position:absolute;top:0;right:0;bottom:0;width:min(480px,100vw);background:#faf8f4;box-shadow:-8px 0 40px rgba(0,0,0,.18);pointer-events:all;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1)">
+      <!-- Header -->
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 1.25rem;border-bottom:.5px solid #ece7dd;flex-shrink:0">
         <div>
-          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Chinese Main</label>
-          <input type="text" id="slide-edit-zh-main" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
+          <div style="font-size:15px;font-weight:600;color:#1c1a16" id="slide-edit-title">Edit Banner Slide</div>
+          <div style="font-size:12px;color:#a39c8f;margin-top:2px" id="slide-edit-subtitle">Changes are saved immediately</div>
         </div>
-        <div>
-          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Chinese Sub</label>
-          <input type="text" id="slide-edit-zh-sub" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
-        </div>
-        <div>
-          <label style="display:block;font-size:12px;color:#6b6a63;margin-bottom:4px;font-weight:500">Tag</label>
-          <input type="text" id="slide-edit-zh-tag" style="width:100%;border:.5px solid #dddbd3;border-radius:8px;padding:7px 10px;font-size:13px">
-        </div>
+        <button onclick="closeSlideEdit()" style="background:#f2efe8;border:.5px solid #dbd5c8;border-radius:8px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#6b6355;line-height:1;flex-shrink:0">×</button>
       </div>
+      <!-- Slide tab selector -->
+      <div style="display:flex;gap:6px;padding:.75rem 1.25rem;border-bottom:.5px solid #ece7dd;flex-shrink:0">
+        <button onclick="openSlideEdit(0)" id="stab-0" class="btn sm" style="flex:1;justify-content:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#5c3418;display:inline-block"></span>Mushroom</button>
+        <button onclick="openSlideEdit(1)" id="stab-1" class="btn sm" style="flex:1;justify-content:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#7a1a0a;display:inline-block"></span>Rose</button>
+        <button onclick="openSlideEdit(2)" id="stab-2" class="btn sm" style="flex:1;justify-content:center;gap:5px"><span style="width:10px;height:10px;border-radius:50%;background:#1e4a10;display:inline-block"></span>Garden</button>
+      </div>
+      <!-- Scrollable body -->
+      <div style="flex:1;overflow-y:auto;padding:1.25rem">
+        <div id="slide-edit-msg" style="margin-bottom:8px"></div>
 
-      <div style="display:flex;gap:8px">
-        <button class="btn p" style="flex:1;justify-content:center;padding:10px;font-size:13px" onclick="saveSlideEdit()">Save Changes</button>
-        <button class="btn" style="justify-content:center;padding:10px;font-size:13px" onclick="closeSlideEdit()">Cancel</button>
+        <!-- Live mini-preview -->
+        <div id="slide-mini-preview" style="border-radius:10px;overflow:hidden;margin-bottom:1.25rem;border:.5px solid #dbd5c8;height:120px;position:relative;display:flex;align-items:flex-end">
+          <div id="slide-mini-bg" style="position:absolute;inset:0;background-size:cover;background-position:center"></div>
+          <div id="slide-mini-overlay" style="position:absolute;inset:0"></div>
+          <div style="position:relative;z-index:2;padding:10px 14px">
+            <div id="slide-mini-h1" style="font-size:14px;font-weight:700;color:#fff;letter-spacing:-.3px;line-height:1.2;text-shadow:0 1px 4px rgba(0,0,0,.5)"></div>
+            <div id="slide-mini-p" style="font-size:11px;color:rgba(255,255,255,.75);margin-top:2px;text-shadow:0 1px 3px rgba(0,0,0,.4)"></div>
+          </div>
+          <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);z-index:2;writing-mode:vertical-rl;font-size:10px;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:3px" id="slide-mini-zh"></div>
+        </div>
+
+        <!-- Section: Image -->
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">Background Image</div>
+        <div id="slide-img-preview" style="margin-bottom:8px"></div>
+        <label id="slide-img-drop" style="display:flex;flex-direction:column;align-items:center;gap:6px;border:.5px dashed #c4bfb2;border-radius:10px;padding:16px;text-align:center;cursor:pointer;background:#f5f2eb;margin-bottom:8px;transition:background .15s" onmouseover="this.style.background='#edeae0'" onmouseout="this.style.background='#f5f2eb'">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a39c8f" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <div style="font-size:12px;color:#6b6355;font-weight:500" id="slide-img-upload-label">Upload background image</div>
+          <div style="font-size:11px;color:#a39c8f">JPG, PNG or WebP · Shown behind the gradient</div>
+          <input type="file" accept="image/*" style="display:none" onchange="handleSlideImg(event)">
+        </label>
+        <button id="slide-img-remove-btn" class="btn sm d" style="width:100%;justify-content:center;margin-bottom:1.25rem;display:none" onclick="removeSlideImg()">
+          <svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>
+          Remove image
+        </button>
+
+        <div style="height:.5px;background:#ece7dd;margin-bottom:1.25rem"></div>
+
+        <!-- Section: English text -->
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">English Text</div>
+        <div style="margin-bottom:10px">
+          <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Headline</label>
+          <input type="text" id="slide-edit-heading" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:14px;font-weight:500;background:#fff;color:#1c1a16">
+        </div>
+        <div style="margin-bottom:1.25rem">
+          <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Subheadline</label>
+          <textarea id="slide-edit-sub" rows="2" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:13px;resize:vertical;font-family:inherit;background:#fff;color:#1c1a16"></textarea>
+        </div>
+
+        <div style="height:.5px;background:#ece7dd;margin-bottom:1.25rem"></div>
+
+        <!-- Section: Chinese text -->
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">Chinese Text (right column)</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+          <div>
+            <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Main (大字)</label>
+            <input type="text" id="slide-edit-zh-main" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;color:#1c1a16">
+          </div>
+          <div>
+            <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Sub (小字)</label>
+            <input type="text" id="slide-edit-zh-sub" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;color:#1c1a16">
+          </div>
+        </div>
+        <div style="margin-bottom:1.25rem">
+          <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Tag label (标签)</label>
+          <input type="text" id="slide-edit-zh-tag" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:13px;background:#fff;color:#1c1a16" placeholder="e.g. 菌菇">
+        </div>
+
+        <div style="height:.5px;background:#ece7dd;margin-bottom:1.25rem"></div>
+        <div style="font-size:11px;color:#a39c8f;margin-bottom:1.25rem">Tip: Changes are saved to your banner immediately when you click Save. The background image sits behind the colour gradient.</div>
+      </div>
+      <!-- Footer actions -->
+      <div style="padding:1rem 1.25rem;border-top:.5px solid #ece7dd;display:flex;gap:8px;flex-shrink:0;background:#faf8f4">
+        <button class="btn p" style="flex:1;justify-content:center;padding:10px;font-size:13px;border-radius:8px" onclick="saveSlideEdit()">
+          <svg width="13" height="13" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 7l4 4 6-6"/></svg>
+          Save Changes
+        </button>
+        <button class="btn" style="justify-content:center;padding:10px 16px;font-size:13px;border-radius:8px" onclick="closeSlideEdit()">Cancel</button>
       </div>
     </div>
   </div>`:'';
@@ -1840,6 +2063,29 @@ function _initHeroCarousel(){
     const dx=e.changedTouches[0].clientX-startX;
     if(Math.abs(dx)>40) heroStep(dx<0?1:-1);
   },{passive:true});
+  // Scroll-based nav transition: off-white over hero → black over products
+  _initNavScrollWatch();
+}
+
+function _initNavScrollWatch(){
+  const _onScroll=()=>{
+    if(vw!=='shop') return;
+    const navEl=document.querySelector('.nav');
+    if(!navEl) return;
+    const hero=document.getElementById('hero-carousel');
+    const heroBottom=hero?hero.getBoundingClientRect().bottom:0;
+    // Transition zone: start fading 80px before hero bottom
+    const threshold=80;
+    if(heroBottom>threshold){
+      navEl.classList.add('nav-hero');
+    } else {
+      navEl.classList.remove('nav-hero');
+    }
+  };
+  window.removeEventListener('scroll',window._navScrollHandler);
+  window._navScrollHandler=_onScroll;
+  window.addEventListener('scroll',_onScroll,{passive:true});
+  _onScroll(); // run once on init
 }
 
 function heroGo(idx){
@@ -1867,35 +2113,69 @@ function openSlideEdit(i){
     {title:'Wild & Natural', sub:'Every bite, a gift from nature', zh_main:'小苦瓜', zh_sub:'心向山野', zh_tag:'蔬菜'},
   ];
   const d=defs[i]||defs[0];
+  const names=['Mushroom Banner','Rose Banner','Garden Banner'];
   const modal=document.getElementById('slide-edit-modal');
-  if(!modal) return;
-  document.getElementById('slide-edit-title').textContent='Edit Slide '+(i+1)+' · '+(i===0?'Brown':i===1?'Red':'Green');
+  const drawer=document.getElementById('slide-edit-drawer');
+  const backdrop=document.getElementById('slide-edit-backdrop');
+  if(!modal||!drawer) return;
+  // Show modal container
+  modal.style.display='block';
+  document.body.style.overflow='hidden';
+  // Animate in
+  requestAnimationFrame(()=>{
+    requestAnimationFrame(()=>{
+      if(drawer) drawer.style.transform='translateX(0)';
+      if(backdrop) backdrop.style.opacity='1';
+    });
+  });
+  // Populate fields
+  const title=document.getElementById('slide-edit-title'); if(title) title.textContent='Edit Banner — '+names[i];
   document.getElementById('slide-edit-heading').value=s.title||d.title||'';
   document.getElementById('slide-edit-sub').value=s.sub||d.sub||'';
   document.getElementById('slide-edit-zh-main').value=s.zh_main||d.zh_main||'';
   document.getElementById('slide-edit-zh-sub').value=s.zh_sub||d.zh_sub||'';
   document.getElementById('slide-edit-zh-tag').value=s.zh_tag||d.zh_tag||'';
   document.getElementById('slide-edit-msg').innerHTML='';
+  // Highlight active tab
+  [0,1,2].forEach(j=>{
+    const tab=document.getElementById('stab-'+j);
+    if(tab){ tab.style.background=j===i?'var(--color-text-primary)':''; tab.style.color=j===i?'var(--color-background-primary)':''; tab.style.borderColor=j===i?'transparent':''; }
+  });
   // Image preview
-  const preview=document.getElementById('slide-img-preview');
-  const removeBtn=document.getElementById('slide-img-remove-btn');
-  const uploadLabel=document.getElementById('slide-img-upload-label');
-  if(s.img){
-    preview.innerHTML=`<div style="border-radius:8px;overflow:hidden;margin-bottom:6px;border:.5px solid #dddbd3"><img src="${s.img}" style="width:100%;height:100px;object-fit:cover;display:block"></div>`;
-    removeBtn.style.display='flex';
-    uploadLabel.textContent='Click to replace image';
-  } else {
-    preview.innerHTML='';
-    removeBtn.style.display='none';
-    uploadLabel.textContent='Click to upload image (JPG/PNG/WebP)';
-  }
-  modal.style.display='flex';
+  _refreshSlideImgPreview(i, s.img||'');
+  // Live preview
+  updateSlidePreview();
 }
 
 function closeSlideEdit(){
   const modal=document.getElementById('slide-edit-modal');
-  if(modal) modal.style.display='none';
+  const drawer=document.getElementById('slide-edit-drawer');
+  const backdrop=document.getElementById('slide-edit-backdrop');
+  if(drawer) drawer.style.transform='translateX(100%)';
+  if(backdrop) backdrop.style.opacity='0';
+  setTimeout(()=>{ if(modal) modal.style.display='none'; },280);
   _editingSlideIdx=null;
+  document.body.style.overflow='';
+}
+
+function updateSlidePreview(){
+  const i=_editingSlideIdx;
+  if(i===null||i===undefined) return;
+  const MINI_BG={brown:'linear-gradient(160deg,#6b4020 0%,#3d1e0a 35%,#1e0e04 65%,#2a1508 100%)',red:'linear-gradient(160deg,#8c1a0c 0%,#5a0a0a 35%,#2e0404 65%,#4a0c08 100%)',green:'linear-gradient(160deg,#2a5a14 0%,#163610 35%,#081804 65%,#0f2808 100%)'};
+  const MINI_OV={brown:'linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)',red:'linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)',green:'linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)'};
+  const themes=['brown','red','green'];
+  const theme=themes[i]||'brown';
+  const h=document.getElementById('slide-edit-heading')?.value||'';
+  const s=document.getElementById('slide-edit-sub')?.value||'';
+  const zm=document.getElementById('slide-edit-zh-main')?.value||'';
+  const imgEl=document.getElementById('slide-mini-bg');
+  const ovEl=document.getElementById('slide-mini-overlay');
+  const imgSrc=(db.heroSlides&&db.heroSlides[i]&&db.heroSlides[i].img)||'';
+  if(imgEl){ imgEl.style.background=MINI_BG[theme]; if(imgSrc) imgEl.style.backgroundImage=`url('${imgSrc}')`; }
+  if(ovEl) ovEl.style.background=MINI_OV[theme];
+  const h1=document.getElementById('slide-mini-h1'); if(h1) h1.textContent=h;
+  const p=document.getElementById('slide-mini-p'); if(p) p.textContent=s;
+  const zh=document.getElementById('slide-mini-zh'); if(zh) zh.textContent=zm;
 }
 
 function saveSlideEdit(){
@@ -1909,11 +2189,25 @@ function saveSlideEdit(){
   const zh_tag=document.getElementById('slide-edit-zh-tag').value.trim();
   const existing=db.heroSlides[i]||{};
   db.heroSlides[i]={...existing,title,sub,zh_main,zh_sub,zh_tag};
-  // Also update slide 0 fallback values for heroTextTitle/Sub
   if(i===0){ if(title) db.heroTextTitle=title; if(sub) db.heroTextSub=sub; }
   sv(true);
-  closeSlideEdit();
-  rShop(document.getElementById('root'));
+  // Show inline success then close
+  const msg=document.getElementById('slide-edit-msg');
+  if(msg){ msg.innerHTML='<div class="m s" style="font-size:12px;margin-bottom:6px">✓ Saved!</div>'; setTimeout(()=>{ if(msg)msg.innerHTML=''; },1500); }
+  // Re-render hero in the background without closing drawer
+  const heroTrack=document.getElementById('hero-track');
+  if(heroTrack){
+    // Patch just the text nodes in the active slide for instant feedback
+    const slides=document.querySelectorAll('.hero-slide');
+    const sl=slides[i];
+    if(sl){
+      const h1=sl.querySelector('h1'); if(h1&&title) h1.textContent=title;
+      const p=sl.querySelector('p'); if(p&&sub) p.textContent=sub;
+      const zm=sl.querySelector('.hero-zh-main'); if(zm&&zh_main) zm.textContent=zh_main;
+      const zs=sl.querySelector('.hero-zh-sub'); if(zs&&zh_sub) zs.textContent=zh_sub;
+      const zt=sl.querySelector('.hero-zh-tag'); if(zt&&zh_tag) zt.textContent=zh_tag;
+    }
+  }
 }
 
 async function handleSlideImg(e){
@@ -1921,26 +2215,40 @@ async function handleSlideImg(e){
   if(i===null||i===undefined) return;
   const f=e.target.files[0]; if(!f) return;
   const msg=document.getElementById('slide-edit-msg');
-  msg.innerHTML='<div class="m i" style="font-size:12px">Uploading…</div>';
-  const path=`hero/slide${i}_${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
-  const{data,error}=await _fb.fsdb.storage.from('netiva').upload(path,f,{upsert:true});
-  if(error){ msg.innerHTML=`<div class="m e" style="font-size:12px">Upload failed: ${error.message}</div>`; return; }
-  const url=_fb.fsdb.storage.from('netiva').getPublicUrl(data.path).data.publicUrl;
+  msg.innerHTML='<div class="m i" style="font-size:12px">⏳ Processing image…</div>';
+  // Try Supabase upload first, fall back to base64
+  let url='';
+  try{
+    if(_fb&&_fb.fsdb&&_fb.fsdb.storage){
+      const path=`hero/slide${i}_${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;
+      const{data,error}=await _fb.fsdb.storage.from('netiva').upload(path,f,{upsert:true});
+      if(!error) url=_fb.fsdb.storage.from('netiva').getPublicUrl(data.path).data.publicUrl;
+    }
+  }catch(err){}
+  // Fallback: base64 data URL
+  if(!url){ url=await new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=()=>rej(); r.readAsDataURL(f); }); }
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
   if(!db.heroSlides[i]) db.heroSlides[i]={};
   db.heroSlides[i].img=url;
   sv(true);
-  msg.innerHTML='<div class="m s" style="font-size:12px">Image saved!</div>';
-  // Refresh preview
+  msg.innerHTML='<div class="m s" style="font-size:12px">✓ Image saved!</div>';
+  setTimeout(()=>{ if(msg)msg.innerHTML=''; },2000);
+  // Update preview
+  _refreshSlideImgPreview(i,url);
+  updateSlidePreview();
+  // Patch the live slide background
+  const slides=document.querySelectorAll('.hero-slide');
+  const sl=slides[i];
+  if(sl){ let bg=sl.querySelector('.hero-slide-bg'); if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.opacity='0.35'; sl.prepend(bg); } bg.src=url; }
+}
+
+function _refreshSlideImgPreview(i,url){
   const preview=document.getElementById('slide-img-preview');
   const removeBtn=document.getElementById('slide-img-remove-btn');
   const uploadLabel=document.getElementById('slide-img-upload-label');
-  if(preview) preview.innerHTML=`<div style="border-radius:8px;overflow:hidden;margin-bottom:6px;border:.5px solid #dddbd3"><img src="${url}" style="width:100%;height:100px;object-fit:cover;display:block"></div>`;
-  if(removeBtn) removeBtn.style.display='flex';
-  if(uploadLabel) uploadLabel.textContent='Click to replace image';
-  // Also re-render hero slide in background
-  rShop(document.getElementById('root'));
-  setTimeout(()=>openSlideEdit(i),60);
+  if(preview) preview.innerHTML=url?`<div style="border-radius:8px;overflow:hidden;margin-bottom:8px;border:.5px solid #dbd5c8;position:relative"><img src="${url}" style="width:100%;height:110px;object-fit:cover;display:block"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);border-radius:4px;padding:2px 6px;font-size:10px;color:#fff">Current image</div></div>`:'';
+  if(removeBtn) removeBtn.style.display=url?'flex':'none';
+  if(uploadLabel) uploadLabel.textContent=url?'Replace image':'Upload background image';
 }
 
 function removeSlideImg(){
@@ -1949,8 +2257,12 @@ function removeSlideImg(){
   if(!db.heroSlides||!db.heroSlides[i]) return;
   db.heroSlides[i].img='';
   sv(true);
-  rShop(document.getElementById('root'));
-  setTimeout(()=>openSlideEdit(i),60);
+  _refreshSlideImgPreview(i,'');
+  updateSlidePreview();
+  // Remove from live slide
+  const slides=document.querySelectorAll('.hero-slide');
+  const sl=slides[i];
+  if(sl){ const bg=sl.querySelector('.hero-slide-bg'); if(bg) bg.remove(); }
 }
 function rShopProducts(){
   const grid=document.getElementById('mp');if(!grid)return;
@@ -2502,35 +2814,39 @@ function togRef(id){const r=db.referrers.find(x=>x.id===id);if(!r)return;r.activ
 function delRef(id){const cnt=membersByRef(id).length;if(cnt>0){const tc=document.getElementById('atc');const d=document.createElement('div');d.className='m e';d.style.marginBottom='10px';d.textContent=t('errorDeleteReferrer');tc.prepend(d);setTimeout(()=>d.remove(),3000);return;}db.referrers=db.referrers.filter(x=>x.id!==id);sv(true);editingRefId=null;rAdmRefs(document.getElementById('atc'));}
 function rAdmMem(tc){tc.innerHTML=`<div style="overflow-x:auto"><table><thead><tr><th>${t('memberName')}</th><th>${t('email')}</th><th>${t('referrer')}</th><th>${t('referralCode')}</th><th>${t('regDate')}</th><th>${t('orders')}</th></tr></thead><tbody>${db.users.length===0?`<tr><td colspan="6" style="text-align:center;color:var(--color-text-secondary);padding:2rem">${t('noMembers')}</td></tr>`:db.users.map(u=>`<tr><td><div style="display:flex;align-items:center;gap:8px"><div class="ava" style="width:24px;height:24px;font-size:10px">${ini(u.name)}</div><span style="font-weight:500">${u.name}</span></div></td><td style="color:var(--color-text-secondary)">${u.email}</td><td><span class="bdg a">${u.referrerName}</span></td><td><span class="code">${refById(u.referrerId)?.code||'—'}</span></td><td style="color:var(--color-text-secondary)">${u.joined}</td><td>${u.orders||0}</td></tr>`).join('')}</tbody></table></div>`;}
 
-function rAdmSettings(tc){const heroImg=db.heroImage||'';const heroTitle=db.heroTextTitle||'';const heroSub=db.heroTextSub||'';tc.innerHTML=`<div style="max-width:480px">
+function rAdmSettings(tc){const heroSlidesData=db.heroSlides||[{},{},{}];const slideNames=[['Mushroom','🍄','brown','#5c3418'],['Rose','🌹','red','#7a1a0a'],['Garden','🌿','green','#1e4a10']];tc.innerHTML=`<div style="max-width:600px">
 <div style="background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1rem">
-  <div style="font-size:15px;font-weight:500;margin-bottom:4px">${lang==='en'?'Hero Banner':lang==='zht'?'首頁橫幅':'首页横幅'}</div>
-  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:14px">${lang==='en'?'Edit the homepage hero title, subtitle, and background image.':lang==='zht'?'編輯首頁橫幅標題、副標題和背景圖片。':'编辑首页横幅标题、副标题和背景图片。'}</div>
-  <div id="hero-text-msg"></div>
-  <div class="fl" style="margin-bottom:10px">
-    <label>${lang==='en'?'Title':lang==='zht'?'標題':'标题'}</label>
-    <input type="text" id="stg-hero-title" value="${heroTitle}" placeholder="${lang==='en'?'Fresh from the source':lang==='zht'?'源自自然的美味':'源自自然的美味'}" style="width:100%">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+    <div style="font-size:15px;font-weight:600">${lang==='en'?'Hero Banner Slides':'首页横幅'}</div>
+    <span style="font-size:11px;color:var(--color-text-tertiary);background:var(--color-background-secondary);padding:2px 8px;border-radius:999px;border:.5px solid var(--color-border-tertiary)">${lang==='en'?'3 slides':'3张幻灯片'}</span>
   </div>
-  <div class="fl" style="margin-bottom:14px">
-    <label>${lang==='en'?'Subtitle':lang==='zht'?'副標題':'副标题'}</label>
-    <textarea id="stg-hero-sub" rows="2" style="width:100%;font-family:var(--font-sans)">${heroSub}</textarea>
+  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:1.25rem">${lang==='en'?'Click any slide to edit its image, headline, subheadline and Chinese text.':'点击任意幻灯片以编辑图片、标题、副标题和中文文字。'}</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px">
+    ${slideNames.map(([name,icon,theme,color],i)=>{
+      const s=heroSlidesData[i]||{};
+      const THUMB_BG={brown:'linear-gradient(160deg,#6b4020,#1e0e04)',red:'linear-gradient(160deg,#8c1a0c,#2e0404)',green:'linear-gradient(160deg,#2a5a14,#081804)'};
+      const title=s.title||(i===0?db.heroTextTitle:'')|| (i===0?'Fresh from the source':i===1?'Finest Ingredients':'Wild & Natural');
+      const hasImg=!!(s.img);
+      return `<div onclick="openSlideEdit(${i})" style="border:.5px solid var(--color-border-secondary);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .15s;position:relative" onmouseover="this.style.borderColor='var(--color-accent)';this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.borderColor='var(--color-border-secondary)';this.style.boxShadow=''">
+        <div style="height:80px;background:${THUMB_BG[theme]};position:relative;display:flex;align-items:flex-end;padding:8px">
+          ${hasImg?`<img src="${s.img}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.35">`:``}
+          <div style="position:absolute;inset:0;background:${THUMB_BG[theme].replace('linear-gradient','linear-gradient').replace(')',',rgba(0,0,0,0.2))')}"></div>
+          <div style="position:relative;z-index:1;font-size:9px;color:rgba(255,255,255,.9);font-weight:600;line-height:1.3;text-shadow:0 1px 3px rgba(0,0,0,.5);overflow:hidden;max-height:28px">${title}</div>
+          ${hasImg?`<div style="position:absolute;top:5px;right:5px;background:rgba(0,0,0,.45);border-radius:4px;padding:1px 5px;font-size:9px;color:#fff;z-index:2">📷</div>`:`<div style="position:absolute;top:5px;right:5px;background:rgba(255,255,255,.15);border-radius:4px;padding:1px 5px;font-size:9px;color:rgba(255,255,255,.7);z-index:2">No img</div>`}
+        </div>
+        <div style="padding:8px 10px;background:var(--color-background-primary)">
+          <div style="display:flex;align-items:center;gap:5px">
+            <span style="width:8px;height:8px;border-radius:50%;background:${color};display:inline-block;flex-shrink:0"></span>
+            <span style="font-size:12px;font-weight:500">${icon} ${name}</span>
+          </div>
+          <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:2px">${s.zh_main||'—'} · ${s.zh_tag||'—'}</div>
+        </div>
+      </div>`;
+    }).join('')}
   </div>
-  <button class="btn p sm" style="margin-bottom:14px" onclick="saveHeroTextSettings()">${lang==='en'?'Save Text':lang==='zht'?'儲存文字':'保存文字'}</button>
-  <div class="dv"></div>
-  <div style="font-size:12px;font-weight:500;color:var(--color-text-secondary);margin:12px 0 6px">${lang==='en'?'Background Image':lang==='zht'?'背景圖片':'背景图片'}</div>
-  <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">${lang==='en'?'Recommended: wide landscape image (1400×600px or similar).':lang==='zht'?'建議使用寬橫幅圖片（1400×600像素）。':'建议使用宽横幅图片（1400×600像素）。'}</div>
-  ${heroImg?`<div style="margin-bottom:12px;border-radius:var(--border-radius-md);overflow:hidden;border:.5px solid var(--color-border-tertiary)"><img src="${heroImg}" style="width:100%;height:180px;object-fit:cover;display:block"></div>`:''}
-  <label class="img-upload-box" style="display:block;cursor:pointer;margin-bottom:8px">
-    <div style="font-size:12px;color:var(--color-text-secondary)">${heroImg?(lang==='en'?'Click to replace banner image':(lang==='zht'?'點擊更換圖片':'点击更换图片')):(lang==='en'?'Click to upload banner image (JPG/PNG/WebP)':(lang==='zht'?'點擊上傳橫幅圖片':'点击上传横幅图片'))}</div>
-    <input type="file" accept="image/*" style="display:none" onchange="handleHeroImg(event)">
-  </label>
-  ${heroImg?`<button class="btn sm d" style="width:100%;justify-content:center" onclick="removeHeroImg()">${lang==='en'?'Remove banner image':(lang==='zht'?'移除圖片':'移除图片')}</button>`:''}
-  <div id="hero-img-msg" style="margin-top:8px"></div>
+  <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:8px">💡 ${lang==='en'?'Images sit behind the colour gradient. Upload a food photo for a richer look.':'图片显示在颜色渐变下方，上传食物照片可获得更丰富的视觉效果。'}</div>
 </div>
-<div style="background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1rem"><div style="font-size:15px;font-weight:500;margin-bottom:1rem">${t('adminCredentials')}</div><div id="stg-msg"></div><div class="fl"><label>${t('newEmail')}</label><input type="email" id="stg-email" value="${db.adminEmail||''}" placeholder="${t('adminEmailPlaceholder')}"></div><div class="dv"></div><div class="fl"><label>${t('currentPassword')}</label><input type="password" id="stg-cur-pw" placeholder="••••••••"></div><div class="fl"><label>${t('newPassword')} <span style="font-size:11px;color:var(--color-text-tertiary)">(${lang==='en'?'leave blank to keep current':lang==='zht'?'留空保持不變':'留空保持不变'})</span></label><input type="password" id="stg-new-pw" placeholder="••••••••" oninput="ckAS2(this.value)"><div class="sb" id="stg-sb" style="width:0%;background:#E24B4A"></div></div><div class="fl"><label>${t('confirmPassword')}</label><input type="password" id="stg-new-pw2" placeholder="••••••••"></div><button class="btn p" style="margin-top:8px" onclick="saveAdminSettings()">${t('saveCredentials')}</button></div></div>`;}
-async function handleHeroImg(e){const f=e.target.files[0];if(!f)return;const msg=document.getElementById('hero-img-msg');if(msg)msg.innerHTML=`<div class="m i" style="font-size:12px">${lang==='en'?'Uploading…':lang==='zht'?'上傳中…':'上传中…'}</div>`;const path=`hero/${Date.now()}_${f.name.replace(/[^a-zA-Z0-9._-]/g,'_')}`;const{data,error}=await _fb.fsdb.storage.from('netiva').upload(path,f,{upsert:true});if(error){console.error('Hero upload error:',error);if(msg)msg.innerHTML=`<div class="m e">Upload failed: ${error.message} — Check that the server is running and accessible.</div>`;return;}db.heroImage=_fb.fsdb.storage.from('netiva').getPublicUrl(data.path).data.publicUrl;sv(true);if(msg)msg.innerHTML=`<div class="m s">${lang==='en'?'Banner image saved!':lang==='zht'?'橫幅圖片已儲存！':'横幅图片已保存！'}</div>`;rAdmSettings(document.getElementById('atc'));}
-function removeHeroImg(){db.heroImage='';sv(true);rAdmSettings(document.getElementById('atc'));}
-function saveHeroTextSettings(){const title=document.getElementById('stg-hero-title')?.value.trim(),sub=document.getElementById('stg-hero-sub')?.value.trim(),msg=document.getElementById('hero-text-msg');if(title!==undefined)db.heroTextTitle=title;if(sub!==undefined)db.heroTextSub=sub;sv(true);if(msg)msg.innerHTML='<div class="m s" style="font-size:12px">'+(lang==='en'?'Text saved!':lang==='zht'?'文字已儲存！':'文字已保存！')+'</div>';setTimeout(()=>{if(msg)msg.innerHTML='';},2000);}function ckAS2(pw){const b=document.getElementById('stg-sb');if(!b)return;if(!pw){b.style.width='0%';return;}let s=0;if(pw.length>=8)s++;if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^A-Za-z0-9]/.test(pw))s++;b.style.width=['0%','25%','50%','75%','100%'][s];b.style.background=['#E24B4A','#E24B4A','#EF9F27','#97C459','#639922'][s];}
+<div style="background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.5rem;margin-bottom:1rem"><div style="font-size:15px;font-weight:500;margin-bottom:1rem">${t('adminCredentials')}</div><div id="stg-msg"></div><div class="fl"><label>${t('newEmail')}</label><input type="email" id="stg-email" value="${db.adminEmail||''}" placeholder="${t('adminEmailPlaceholder')}"></div><div class="dv"></div><div class="fl"><label>${t('currentPassword')}</label><input type="password" id="stg-cur-pw" placeholder="••••••••"></div><div class="fl"><label>${t('newPassword')} <span style="font-size:11px;color:var(--color-text-tertiary)">(${lang==='en'?'leave blank to keep current':lang==='zht'?'留空保持不變':'留空保持不变'})</span></label><input type="password" id="stg-new-pw" placeholder="••••••••" oninput="ckAS2(this.value)"><div class="sb" id="stg-sb" style="width:0%;background:#E24B4A"></div></div><div class="fl"><label>${t('confirmPassword')}</label><input type="password" id="stg-new-pw2" placeholder="••••••••"></div><button class="btn p" style="margin-top:8px" onclick="saveAdminSettings()">${t('saveCredentials')}</button></div></div>`;}function ckAS2(pw){const b=document.getElementById('stg-sb');if(!b)return;if(!pw){b.style.width='0%';return;}let s=0;if(pw.length>=8)s++;if(/[A-Z]/.test(pw))s++;if(/[0-9]/.test(pw))s++;if(/[^A-Za-z0-9]/.test(pw))s++;b.style.width=['0%','25%','50%','75%','100%'][s];b.style.background=['#E24B4A','#E24B4A','#EF9F27','#97C459','#639922'][s];}
 function saveAdminSettings(){const em=document.getElementById('stg-email').value.trim().toLowerCase(),cur=document.getElementById('stg-cur-pw').value,npw=document.getElementById('stg-new-pw').value,npw2=document.getElementById('stg-new-pw2').value,msg=document.getElementById('stg-msg');if(cur!==db.adminPassword){msg.innerHTML=`<div class="m e">${t('errorCurrentPassword')}</div>`;return;}if(!em){msg.innerHTML=`<div class="m e">${t('errorEmailRequired')}</div>`;return;}if(npw&&npw.length<8){msg.innerHTML=`<div class="m e">${t('errorPassShort')}</div>`;return;}if(npw&&npw!==npw2){msg.innerHTML=`<div class="m e">${t('errorPassMismatch')}</div>`;return;}db.adminEmail=em;if(npw)db.adminPassword=npw;sv(true);msg.innerHTML=`<div class="m s">${t('credentialsSaved')}</div>`;document.getElementById('stg-cur-pw').value='';document.getElementById('stg-new-pw').value='';document.getElementById('stg-new-pw2').value='';if(document.getElementById('stg-sb'))document.getElementById('stg-sb').style.width='0%';}
 
 function toggleFeeEdit(){const ed=document.getElementById('fee-edit'),disp=document.getElementById('fee-display');if(!ed||!disp)return;const isOpen=ed.style.display==='block';ed.style.display=isOpen?'none':'block';if(!isOpen){document.getElementById('fee-input').value=(FEE_RATE*100).toFixed(4).replace(/\.?0+$/,'');document.getElementById('fee-input').focus();}}

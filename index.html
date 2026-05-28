@@ -1426,6 +1426,8 @@ window._boot = async function _boot(){
         if(!snap.exists()) return;
         _applyHeroDoc(snap.data());
         try{localStorage.setItem(IMG_DOC_KEY,JSON.stringify(_buildLocalImgCache()));}catch(e){}
+        // Skip re-render if we just wrote this ourselves (admin slide edit) — DOM is already patched
+        if(window._suppressNextHeroRender){ window._suppressNextHeroRender=false; return; }
         _debouncedRender();
       });
     }catch(e){ console.warn('Supabase hero listener failed:',e); }
@@ -2190,6 +2192,7 @@ function saveSlideEdit(){
   const existing=db.heroSlides[i]||{};
   db.heroSlides[i]={...existing,title,sub,zh_main,zh_sub,zh_tag};
   if(i===0){ if(title) db.heroTextTitle=title; if(sub) db.heroTextSub=sub; }
+  window._suppressNextHeroRender=true;
   sv(true);
   // Show inline success then close
   const msg=document.getElementById('slide-edit-msg');
@@ -2230,16 +2233,23 @@ async function handleSlideImg(e){
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
   if(!db.heroSlides[i]) db.heroSlides[i]={};
   db.heroSlides[i].img=url;
+  // Suppress the hero snapshot listener from triggering a full re-render —
+  // we patch the DOM directly below, so a re-render would wipe the new image.
+  window._suppressNextHeroRender=true;
   sv(true);
   msg.innerHTML='<div class="m s" style="font-size:12px">✓ Image saved!</div>';
   setTimeout(()=>{ if(msg)msg.innerHTML=''; },2000);
-  // Update preview
+  // Update drawer preview
   _refreshSlideImgPreview(i,url);
   updateSlidePreview();
-  // Patch the live slide background
+  // Patch the live slide background immediately — ensure correct styles
   const slides=document.querySelectorAll('.hero-slide');
   const sl=slides[i];
-  if(sl){ let bg=sl.querySelector('.hero-slide-bg'); if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.opacity='0.35'; sl.prepend(bg); } bg.src=url; }
+  if(sl){
+    let bg=sl.querySelector('.hero-slide-bg');
+    if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0.35'; sl.prepend(bg); }
+    bg.src=url; bg.style.opacity='0.35';
+  }
 }
 
 function _refreshSlideImgPreview(i,url){
@@ -2256,6 +2266,7 @@ function removeSlideImg(){
   if(i===null||i===undefined) return;
   if(!db.heroSlides||!db.heroSlides[i]) return;
   db.heroSlides[i].img='';
+  window._suppressNextHeroRender=true;
   sv(true);
   _refreshSlideImgPreview(i,'');
   updateSlidePreview();

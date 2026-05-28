@@ -2098,16 +2098,16 @@ function rShop(r){
 
   const THEME_OVERLAYS={
     brown:(img)=>`
-      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.35">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)"></div>
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(60,32,10,0.55) 0%,rgba(28,14,4,0.72) 45%,rgba(18,8,2,0.88) 100%)'}"></div>
       <div class="hero-grain"></div>`,
     red:(img)=>`
-      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.3">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)"></div>
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(120,18,10,0.55) 0%,rgba(68,8,8,0.78) 45%,rgba(32,4,4,0.92) 100%)'}"></div>
       <div class="hero-grain hero-grain-red"></div>`,
     green:(img)=>`
-      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:0.28">`:``}
-      <div class="hero-slide-overlay" style="background:linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)"></div>
+      ${img?`<img class="hero-slide-bg" src="${img}" alt="" style="opacity:1">`:``}
+      <div class="hero-slide-overlay" style="background:${img?'linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)'  :'linear-gradient(160deg,rgba(28,64,14,0.52) 0%,rgba(14,36,8,0.78) 45%,rgba(6,18,2,0.92) 100%)'}"></div>
       <div class="hero-grain hero-grain-green"></div>`,
   };
 
@@ -2499,8 +2499,10 @@ async function handleSlideImg(e){
   const sl=slides[i];
   if(sl){
     let bg=sl.querySelector('.hero-slide-bg');
-    if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0.35'; sl.prepend(bg); }
-    bg.src=savedUrl; bg.style.opacity='0.35';
+    if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:1'; sl.prepend(bg); }
+    bg.src=savedUrl; bg.style.opacity='1';
+    const ov=sl.querySelector('.hero-slide-overlay');
+    if(ov) ov.style.background='linear-gradient(to top,rgba(0,0,0,0.55) 0%,rgba(0,0,0,0.15) 55%,rgba(0,0,0,0.05) 100%)';
   }
 }
 

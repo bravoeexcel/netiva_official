@@ -1827,23 +1827,34 @@ function render(){
 
 function rShop(r){
   const heroImg=db.heroImage||'';
-  const heroTitle=lang==='en'?(db.heroTextTitle||t('heroTitle')):t('heroTitle');
-  const heroSub=lang==='en'?(db.heroTextSub||t('heroSub')):t('heroSub');
-
   // ── 3 carousel slides: use admin hero image as slide 1 if set, else Unsplash placeholders
   // Per-slide defaults (text, theme) merged with any saved overlay images
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  // Per-slide multilingual defaults
   const SLIDE_DEFS=[
     { theme:'brown', zh_main:'自然生材', zh_sub:'我们崇尚', zh_tag:'菌菇',
-      title: heroTitle, sub: heroSub },
+      title_en:'Fresh from the source',     title_zh:'源自自然的美味',     title_zht:'源自自然的美味',
+      sub_en:'Artisan foods & drinks, delivered to your door', sub_zh:'精选食品与饮品，直达您的门口', sub_zht:'精選食品與飲品，直達您的門口' },
     { theme:'red',   zh_main:'魔鬼辣椒', zh_sub:'自然生材', zh_tag:'辣椒',
-      title: lang==='zht'?'精選好物':lang==='zh'?'精选好物':'Finest Ingredients',
-      sub:   lang==='zht'?'嚴選優質食材，用心送達':lang==='zh'?'严选优质食材，用心送达':'Carefully sourced, lovingly delivered' },
+      title_en:'Finest Ingredients',        title_zh:'精选好物',           title_zht:'精選好物',
+      sub_en:'Carefully sourced, lovingly delivered', sub_zh:'严选优质食材，用心送达', sub_zht:'嚴選優質食材，用心送達' },
     { theme:'green', zh_main:'小苦瓜',   zh_sub:'心向山野', zh_tag:'蔬菜',
-      title: lang==='zht'?'都往山野去':lang==='zh'?'都往山野去':'Wild & Natural',
-      sub:   lang==='zht'?'每一口都是自然的饋贈':lang==='zh'?'每一口都是自然的馈赠':'Every bite, a gift from nature' },
+      title_en:'Wild & Natural',            title_zh:'都往山野去',         title_zht:'都往山野去',
+      sub_en:'Every bite, a gift from nature', sub_zh:'每一口都是自然的馈赠', sub_zht:'每一口都是自然的饋贈' },
   ];
-  const SLIDES=SLIDE_DEFS.map((def,i)=>({...def,...(db.heroSlides[i]||{})}));
+  // Merge saved slide data over defaults, then resolve the right language
+  function resolveSlide(def, saved){
+    const merged={...def,...saved};
+    // Migration: if old single-language title/sub saved, treat as en
+    if(saved.title && !saved.title_en) merged.title_en=saved.title;
+    if(saved.sub   && !saved.sub_en)   merged.sub_en=saved.sub;
+    const lk=lang==='zht'?'zht':lang==='zh'?'zh':'en';
+    return {...merged,
+      title: merged['title_'+lk] || merged.title_en || def.title_en,
+      sub:   merged['sub_'+lk]   || merged.sub_en   || def.sub_en,
+    };
+  }
+  const SLIDES=SLIDE_DEFS.map((def,i)=>resolveSlide(def, db.heroSlides[i]||{}));
 
   // Theme: solid colour bg + CSS grain texture + artwork layer. No photo unless admin uploads one.
   const THEME_BG={
@@ -2197,10 +2208,16 @@ function rShop(r){
 
         <div style="height:.5px;background:#ece7dd;margin-bottom:1.25rem"></div>
 
-        <!-- Section: English text -->
-        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">English Text</div>
+        <!-- Section: Multilingual text -->
+        <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">Banner Text</div>
+        <!-- Language tabs -->
+        <div style="display:flex;gap:4px;margin-bottom:12px">
+          <button id="stxt-en" onclick="switchTextLang('en')" style="flex:1;padding:5px 0;font-size:12px;border-radius:6px;border:.5px solid #dbd5c8;background:#1c1a16;color:#faf8f4;cursor:pointer;font-family:inherit">EN</button>
+          <button id="stxt-zh" onclick="switchTextLang('zh')" style="flex:1;padding:5px 0;font-size:12px;border-radius:6px;border:.5px solid #dbd5c8;background:transparent;color:#6b6355;cursor:pointer;font-family:inherit">简体</button>
+          <button id="stxt-zht" onclick="switchTextLang('zht')" style="flex:1;padding:5px 0;font-size:12px;border-radius:6px;border:.5px solid #dbd5c8;background:transparent;color:#6b6355;cursor:pointer;font-family:inherit">繁體</button>
+        </div>
         <div style="margin-bottom:10px">
-          <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Headline</label>
+          <label style="display:block;font-size:12px;color:#6b6355;margin-bottom:4px;font-weight:500">Headline <span id="slide-txt-lang-label" style="font-weight:400;color:#a39c8f">(English)</span></label>
           <input type="text" id="slide-edit-heading" oninput="updateSlidePreview()" style="width:100%;border:.5px solid #dbd5c8;border-radius:8px;padding:7px 10px;font-size:14px;font-weight:500;background:#fff;color:#1c1a16">
         </div>
         <div style="margin-bottom:1.25rem">
@@ -2317,6 +2334,40 @@ function heroStep(dir){
 // ── Per-slide hero edit ───────────────────────────────────────────────────
 let _editingSlideIdx=null;
 
+function _populateSlideTextFields(){
+  const tl=window._slideTextLang||'en';
+  const dw=document.getElementById('slide-edit-drawer');
+  const hEl=document.getElementById('slide-edit-heading');
+  const sEl=document.getElementById('slide-edit-sub');
+  const lbl=document.getElementById('slide-txt-lang-label');
+  if(!dw||!hEl||!sEl) return;
+  if(tl==='zh'){ hEl.value=dw._txtzh||''; sEl.value=dw._subzh||''; if(lbl)lbl.textContent='(简体中文)'; }
+  else if(tl==='zht'){ hEl.value=dw._txtzht||''; sEl.value=dw._subzht||''; if(lbl)lbl.textContent='(繁體中文)'; }
+  else { hEl.value=dw._txten||''; sEl.value=dw._suben||''; if(lbl)lbl.textContent='(English)'; }
+  // Update tab button styles
+  ['en','zh','zht'].forEach(l=>{
+    const btn=document.getElementById('stxt-'+l);
+    if(!btn) return;
+    const on=l===tl;
+    btn.style.background=on?'#1c1a16':'transparent';
+    btn.style.color=on?'#faf8f4':'#6b6355';
+  });
+  updateSlidePreview();
+}
+function switchTextLang(tl){
+  // Save current field values into drawer store before switching
+  const dw=document.getElementById('slide-edit-drawer');
+  const hEl=document.getElementById('slide-edit-heading');
+  const sEl=document.getElementById('slide-edit-sub');
+  if(dw&&hEl&&sEl){
+    const cur=window._slideTextLang||'en';
+    if(cur==='zh'){ dw._txtzh=hEl.value; dw._subzh=sEl.value; }
+    else if(cur==='zht'){ dw._txtzht=hEl.value; dw._subzht=sEl.value; }
+    else { dw._txten=hEl.value; dw._suben=sEl.value; }
+  }
+  window._slideTextLang=tl;
+  _populateSlideTextFields();
+}
 function openSlideEdit(i){
   _editingSlideIdx=i;
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
@@ -2344,8 +2395,20 @@ function openSlideEdit(i){
   });
   // Populate fields
   const title=document.getElementById('slide-edit-title'); if(title) title.textContent='Edit Banner — '+names[i];
-  document.getElementById('slide-edit-heading').value=s.title||d.title||'';
-  document.getElementById('slide-edit-sub').value=s.sub||d.sub||'';
+  // Store all six per-language text values on the drawer for tab-switching
+  // Migration: treat legacy single title/sub as en
+  const _sen  = s.title_en  || (s.title && !s.title_zh ? s.title : '') || d.title_en || '';
+  const _szh  = s.title_zh  || d.title_zh  || '';
+  const _szht = s.title_zht || d.title_zht || '';
+  const _suben  = s.sub_en  || (s.sub && !s.sub_zh ? s.sub : '') || d.sub_en || '';
+  const _subzh  = s.sub_zh  || d.sub_zh  || '';
+  const _subzht = s.sub_zht || d.sub_zht || '';
+  // Store on drawer element for tab switching
+  const _dw=document.getElementById('slide-edit-drawer');
+  if(_dw){ _dw._txten=_sen;_dw._txtzh=_szh;_dw._txtzht=_szht;_dw._suben=_suben;_dw._subzh=_subzh;_dw._subzht=_subzht; }
+  // Default to current UI lang tab
+  window._slideTextLang=lang==='zht'?'zht':lang==='zh'?'zh':'en';
+  _populateSlideTextFields();
   document.getElementById('slide-edit-zh-main').value=s.zh_main||d.zh_main||'';
   document.getElementById('slide-edit-zh-sub').value=s.zh_sub||d.zh_sub||'';
   document.getElementById('slide-edit-zh-tag').value=s.zh_tag||d.zh_tag||'';
@@ -2396,14 +2459,29 @@ async function saveSlideEdit(){
   const i=_editingSlideIdx;
   if(i===null||i===undefined) return;
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
-  const title=document.getElementById('slide-edit-heading').value.trim();
-  const sub=document.getElementById('slide-edit-sub').value.trim();
+  // Flush the currently-visible tab's values back into the drawer store before saving
+  const _dw2=document.getElementById('slide-edit-drawer');
+  const _tl=window._slideTextLang||'en';
+  if(_dw2){
+    const hv=document.getElementById('slide-edit-heading').value.trim();
+    const sv2=document.getElementById('slide-edit-sub').value.trim();
+    if(_tl==='zh'){ _dw2._txtzh=hv; _dw2._subzh=sv2; }
+    else if(_tl==='zht'){ _dw2._txtzht=hv; _dw2._subzht=sv2; }
+    else { _dw2._txten=hv; _dw2._suben=sv2; }
+  }
+  const title_en  = _dw2?_dw2._txten:'';
+  const title_zh  = _dw2?_dw2._txtzh:'';
+  const title_zht = _dw2?_dw2._txtzht:'';
+  const sub_en    = _dw2?_dw2._suben:'';
+  const sub_zh    = _dw2?_dw2._subzh:'';
+  const sub_zht   = _dw2?_dw2._subzht:'';
   const zh_main=document.getElementById('slide-edit-zh-main').value.trim();
   const zh_sub=document.getElementById('slide-edit-zh-sub').value.trim();
   const zh_tag=document.getElementById('slide-edit-zh-tag').value.trim();
   const existing=db.heroSlides[i]||{};
-  db.heroSlides[i]={...existing,title,sub,zh_main,zh_sub,zh_tag};
-  if(i===0){ if(title) db.heroTextTitle=title; if(sub) db.heroTextSub=sub; }
+  db.heroSlides[i]={...existing,title_en,title_zh,title_zht,sub_en,sub_zh,sub_zht,zh_main,zh_sub,zh_tag};
+  // Keep legacy keys in sync for slide 0 (heroTextTitle/Sub) — use en values
+  if(i===0){ if(title_en) db.heroTextTitle=title_en; if(sub_en) db.heroTextSub=sub_en; }
 
   // Write hero doc directly to ensure reliable persistence
   const _heroDocPayload={};
@@ -2425,8 +2503,11 @@ async function saveSlideEdit(){
   const slides=document.querySelectorAll('.hero-slide');
   const sl=slides[i];
   if(sl){
-    const h1=sl.querySelector('h1'); if(h1&&title) h1.textContent=title;
-    const p=sl.querySelector('p'); if(p&&sub) p.textContent=sub;
+    const _lk2=lang==='zht'?'zht':lang==='zh'?'zh':'en';
+    const _rt=db.heroSlides[i]['title_'+_lk2]||db.heroSlides[i].title_en||'';
+    const _rs=db.heroSlides[i]['sub_'+_lk2]||db.heroSlides[i].sub_en||'';
+    const h1=sl.querySelector('h1'); if(h1&&_rt) h1.textContent=_rt;
+    const p=sl.querySelector('p'); if(p&&_rs) p.textContent=_rs;
     const zm=sl.querySelector('.hero-zh-main'); if(zm&&zh_main) zm.textContent=zh_main;
     const zs=sl.querySelector('.hero-zh-sub'); if(zs&&zh_sub) zs.textContent=zh_sub;
     const zt=sl.querySelector('.hero-zh-tag'); if(zt&&zh_tag) zt.textContent=zh_tag;
@@ -3121,7 +3202,7 @@ function rAdmSettings(tc){const heroSlidesData=db.heroSlides||[{},{},{}];const s
     ${slideNames.map(([name,icon,theme,color],i)=>{
       const s=heroSlidesData[i]||{};
       const THUMB_BG={brown:'linear-gradient(160deg,#6b4020,#1e0e04)',red:'linear-gradient(160deg,#8c1a0c,#2e0404)',green:'linear-gradient(160deg,#2a5a14,#081804)'};
-      const title=s.title||(i===0?db.heroTextTitle:'')|| (i===0?'Fresh from the source':i===1?'Finest Ingredients':'Wild & Natural');
+      const _lk=lang==='zht'?'zht':lang==='zh'?'zh':'en';const title=s['title_'+_lk]||s.title_en||s.title||(i===0?'Fresh from the source':i===1?'Finest Ingredients':'Wild & Natural');
       const hasImg=!!(s.img);
       return `<div onclick="openSlideEdit(${i})" style="border:.5px solid var(--color-border-secondary);border-radius:10px;overflow:hidden;cursor:pointer;transition:all .15s;position:relative" onmouseover="this.style.borderColor='var(--color-accent)';this.style.boxShadow='0 4px 16px rgba(0,0,0,.1)'" onmouseout="this.style.borderColor='var(--color-border-secondary)';this.style.boxShadow=''">
         <div style="height:80px;background:${THUMB_BG[theme]};position:relative;display:flex;align-items:flex-end;padding:8px">

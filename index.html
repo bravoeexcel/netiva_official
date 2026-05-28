@@ -704,11 +704,17 @@
       }
     };
 
+    // ── Image helpers (base64 stored inline in DB — no separate bucket needed) ──
+    // Mirrors the interface used by all image-upload code (handleSlideImg,
+    // handleProdImgs, handleQr) so they work without any other changes.
+    window._fb.uploadImage = async function(path, base64DataUrl){
+      // Store base64 inline in the DB row; just return the dataUrl as the URL.
+      return base64DataUrl;
+    };
+    window._fb.deleteImage = async function(path){ /* no-op */ };
+    window._fb.isBase64 = function(str){ return typeof str==='string' && str.startsWith('data:image'); };
+
     // ── Wire up window._fb and boot ──────────────────────────────────────────
-    // We attach a "storage" property to _fb.fsdb so existing image-upload code
-    // (handleProdImgs, handleHeroImg, handleQr) continues to work unchanged:
-    //   _fb.fsdb.storage.from('netiva').upload(...)
-    //   _fb.fsdb.storage.from('netiva').getPublicUrl(...)
     const storeDocRef = zbDoc(null, null, MAIN_DOC);
     window._fb.fsdb       = { storage: zbStorage };
     window._fb.storeDoc   = storeDocRef;
@@ -1599,13 +1605,15 @@ function calcTotal(s){return parseFloat((s+calcFee(s)).toFixed(2));}
 
 function setLang(l){
   lang=l;
+  try{localStorage.setItem('netiva_lang',l);}catch(e){}
   document.getElementById('lb-en').classList.toggle('on',l==='en');
   document.getElementById('lb-zh').classList.toggle('on',l==='zh');
   document.getElementById('lb-zht').classList.toggle('on',l==='zht');
   const labels={en:'EN',zh:'简体',zht:'繁體'};
   const lbl=document.getElementById('lang-label');if(lbl)lbl.textContent=labels[l]||'EN';
-  document.getElementById('nav-shop').textContent=t('shop');
-  document.getElementById('nav-admin').textContent=t('admin');
+  const nsShop=document.getElementById('nav-shop');if(nsShop){const sp=nsShop.querySelector('span');if(sp)sp.textContent=t('shop');}
+  const nsAdmin=document.getElementById('nav-admin');if(nsAdmin){const sp=nsAdmin.querySelector('span');if(sp)sp.textContent=t('admin');}
+  const nsCart=document.getElementById('nav-cart-label');if(nsCart)nsCart.textContent=t('cart');
   // Update mobile dropdown labels
   const ms=document.getElementById('mob-nav-shop');if(ms){const sp=ms.querySelector('span');if(sp)sp.textContent=t('shop');}
   const ma=document.getElementById('mob-nav-admin');if(ma){const sp=ma.querySelector('span');if(sp)sp.textContent=t('admin');}
@@ -1622,6 +1630,9 @@ function pickLang(l){
   document.getElementById('lb-zht').classList.toggle('on',l==='zht');
   const ov=document.getElementById('lang-pick-overlay');
   if(ov){ov.classList.add('fade-out');setTimeout(()=>{ov.style.display='none';ov.classList.remove('fade-out');},360);}
+  const nsCart2=document.getElementById('nav-cart-label');if(nsCart2)nsCart2.textContent=t('cart');
+  const nsShop2=document.getElementById('nav-shop');if(nsShop2){const sp=nsShop2.querySelector('span');if(sp)sp.textContent=t('shop');}
+  const nsAdmin2=document.getElementById('nav-admin');if(nsAdmin2){const sp=nsAdmin2.querySelector('span');if(sp)sp.textContent=t('admin');}
   rNav();render();
 }
 
@@ -1816,8 +1827,8 @@ function render(){
 
 function rShop(r){
   const heroImg=db.heroImage||'';
-  const heroTitle=db.heroTextTitle||(lang==='zh'||lang==='zht'?'源自自然的美味':'Fresh from the source');
-  const heroSub=db.heroTextSub||(lang==='zh'||lang==='zht'?'精选食品与饮品，直达您的门口':'Artisan foods & drinks, delivered to your door');
+  const heroTitle=lang==='en'?(db.heroTextTitle||t('heroTitle')):t('heroTitle');
+  const heroSub=lang==='en'?(db.heroTextSub||t('heroSub')):t('heroSub');
 
   // ── 3 carousel slides: use admin hero image as slide 1 if set, else Unsplash placeholders
   // Per-slide defaults (text, theme) merged with any saved overlay images
@@ -1826,11 +1837,11 @@ function rShop(r){
     { theme:'brown', zh_main:'自然生材', zh_sub:'我们崇尚', zh_tag:'菌菇',
       title: heroTitle, sub: heroSub },
     { theme:'red',   zh_main:'魔鬼辣椒', zh_sub:'自然生材', zh_tag:'辣椒',
-      title: lang==='zh'||lang==='zht'?'精选好物':'Finest Ingredients',
-      sub:   lang==='zh'||lang==='zht'?'严选优质食材，用心送达':'Carefully sourced, lovingly delivered' },
+      title: lang==='zht'?'精選好物':lang==='zh'?'精选好物':'Finest Ingredients',
+      sub:   lang==='zht'?'嚴選優質食材，用心送達':lang==='zh'?'严选优质食材，用心送达':'Carefully sourced, lovingly delivered' },
     { theme:'green', zh_main:'小苦瓜',   zh_sub:'心向山野', zh_tag:'蔬菜',
-      title: lang==='zh'||lang==='zht'?'都往山野去':'Wild & Natural',
-      sub:   lang==='zh'||lang==='zht'?'每一口都是自然的馈赠':'Every bite, a gift from nature' },
+      title: lang==='zht'?'都往山野去':lang==='zh'?'都往山野去':'Wild & Natural',
+      sub:   lang==='zht'?'每一口都是自然的饋贈':lang==='zh'?'每一口都是自然的馈赠':'Every bite, a gift from nature' },
   ];
   const SLIDES=SLIDE_DEFS.map((def,i)=>({...def,...(db.heroSlides[i]||{})}));
 
@@ -2456,7 +2467,11 @@ async function handleSlideImg(e){
 
   if(!db.heroSlides) db.heroSlides=[{},{},{}];
   if(!db.heroSlides[i]) db.heroSlides[i]={};
-  db.heroSlides[i].img=url;
+
+  // Use uploadImage (returns base64 dataUrl for inline DB storage)
+  let savedUrl=url;
+  if(_fb&&_fb.uploadImage){ try{ savedUrl=await _fb.uploadImage('hero/slide'+i,url)||url; }catch(e){ savedUrl=url; } }
+  db.heroSlides[i].img=savedUrl;
 
   // Write the hero doc directly so the image is guaranteed to be persisted
   // independently of the main metadata doc (images are stored in 'hero' doc).
@@ -2477,7 +2492,7 @@ async function handleSlideImg(e){
   msg.innerHTML='<div class="m s" style="font-size:12px">✓ Image saved!</div>';
   setTimeout(()=>{ if(msg)msg.innerHTML=''; },2000);
   // Update drawer preview
-  _refreshSlideImgPreview(i,url);
+  _refreshSlideImgPreview(i,savedUrl);
   updateSlidePreview();
   // Patch the live slide background immediately
   const slides=document.querySelectorAll('.hero-slide');
@@ -2485,7 +2500,7 @@ async function handleSlideImg(e){
   if(sl){
     let bg=sl.querySelector('.hero-slide-bg');
     if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0.35'; sl.prepend(bg); }
-    bg.src=url; bg.style.opacity='0.35';
+    bg.src=savedUrl; bg.style.opacity='0.35';
   }
 }
 

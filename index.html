@@ -104,8 +104,9 @@
     .bdg.a { background: var(--color-accent-light); color: #7a5230; }
 
     /* ── Hero Carousel — Heytea style ──────────────────────────── */
-    .hero { position: relative; min-height: 560px; height: 560px; overflow: hidden; background: #f5f3ef; }
-    .hero.no-img { background: #f5f3ef; min-height: 420px; height: 420px; }
+    .hero-wrapper { padding: 1rem 1.5rem 0; }
+    .hero { position: relative; min-height: 500px; height: 500px; overflow: hidden; background: #f5f3ef; border-radius: 16px; }
+    .hero.no-img { background: #f5f3ef; min-height: 380px; height: 380px; }
 
     /* Carousel track */
     .hero-track { display: flex; width: 100%; height: 100%; position: absolute; inset: 0; transition: transform .65s cubic-bezier(.4,0,.2,1); will-change: transform; }
@@ -214,7 +215,8 @@
     }
 
     @media (max-width: 600px) {
-      .hero { min-height: 480px; height: 480px; }
+      .hero { min-height: 440px; height: 440px; }
+      .hero-wrapper { padding: 0.75rem 1rem 0; }
       .hero-content { left: 1.5rem; bottom: 2.5rem; max-width: 220px; min-width: 0; }
       .hero h1 { font-size: 22px; }
       .hero-cta-btn { min-width: 100px; max-width: 140px; font-size: 12px; padding: 9px 14px; }
@@ -642,7 +644,8 @@
       .nav-desktop-links { display: none !important; }
       .nav { position: relative; }
       .rate-chip { font-size: 10px; padding: 3px 7px; max-width: 120px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
-      .hero { min-height: 396px; }
+      .hero { min-height: 360px; height: 360px; }
+      .hero-wrapper { padding: 0.5rem 0.75rem 0; }
       .hero h1 { font-size: 22px; }
       .hero p { font-size: 13px; }
       .hero-content { bottom: 2rem; left: 1.5rem; }
@@ -2324,7 +2327,7 @@ function rShop(r){
   const adminHeroBar=db.adm?'':'' ;
 
   r.innerHTML=`
-    <div class="hero" id="hero-carousel">
+    <div class="hero-wrapper"><div class="hero" id="hero-carousel">
       <div class="hero-track" id="hero-track">${slidesHtml}</div>
       <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Previous">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L5 7l4 5"/></svg>
@@ -2333,7 +2336,7 @@ function rShop(r){
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 2l4 5-4 5"/></svg>
       </button>
       <div class="hero-dots">${dotsHtml}</div>
-    </div>
+    </div></div>
     <div class="prods" id="mp"></div>`;
 
   rShopProducts();

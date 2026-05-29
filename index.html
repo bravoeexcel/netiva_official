@@ -2953,6 +2953,10 @@ function rPDP(id){
       <div class="pdp-info-col">
         ${p.category?`<div class="pdp-category-chip">${p.category}</div>`:''}
         <div class="pdp-name">${name}</div>
+        <div style="margin-top:0.75rem;margin-bottom:0.5rem">
+          <div class="pdp-price-cny" id="pdp-price-${id}" data-usd="${price}">${cny(price)}</div>
+          <div class="pdp-price-usd" id="pdp-price-usd-${id}">$${price.toFixed(2)} USD</div>
+        </div>
         <div class="pdp-tags">
           ${tag?`<span class="pdp-tag accent">${tag}</span>`:''}
           ${p.category?`<span class="pdp-tag">${p.category}</span>`:''}
@@ -2961,10 +2965,6 @@ function rPDP(id){
         ${desc?`<div class="pdp-desc" style="padding:0 0 4px">${desc}</div>`:''}
         ${varSection}
         ${content?`<div class="pdp-divider"></div><div class="pdp-desc">${content}</div>`:''}
-        <div style="margin-top:1.5rem">
-          <div class="pdp-price-cny" id="pdp-price-${id}" data-usd="${price}">${cny(price)}</div>
-          <div class="pdp-price-usd" id="pdp-price-usd-${id}">$${price.toFixed(2)} USD</div>
-        </div>
         <div id="pdp-msg-${id}" style="margin-top:10px"></div>
       </div>
     </div>

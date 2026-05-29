@@ -95,8 +95,8 @@
     .btn.p { background: var(--color-text-primary); color: var(--color-background-primary); border-color: transparent; }
     .btn.p:hover { opacity: .85; }
     .btn.sm { font-size: 12px; padding: 4px 10px; }
-    .btn.d { border-color: #e8b4b4; color: #8b2e2e; }
-    .btn.d:hover { background: #fdf0f0; }
+    .btn.d { border-color: #e8b4b4; color: #c0392b; background: #fff5f5; }
+    .btn.d:hover { background: #fde8e8; border-color: #c0392b; }
     .ava { width: 30px; height: 30px; border-radius: 50%; background: #e8f0d8; color: #4a6b20; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 500; cursor: pointer; border: .5px solid #bdd496; }
     .bdg { border-radius: 999px; font-size: 11px; font-weight: 500; padding: 2px 8px; display: inline-block; }
     .bdg.g { background: #e8f0d8; color: #4a6b20; }
@@ -1900,9 +1900,11 @@ function rShop(r){
     if(saved.title && !saved.title_en) merged.title_en=saved.title;
     if(saved.sub   && !saved.sub_en)   merged.sub_en=saved.sub;
     const lk=lang==='zht'?'zht':lang==='zh'?'zh':'en';
+    // Use explicit undefined check so intentionally blank strings are preserved
+    const _t = merged['title_'+lk]; const _s = merged['sub_'+lk];
     return {...merged,
-      title: merged['title_'+lk] || merged.title_en || def.title_en,
-      sub:   merged['sub_'+lk]   || merged.sub_en   || def.sub_en,
+      title: (_t !== undefined && _t !== null) ? _t : (merged.title_en !== undefined ? merged.title_en : def.title_en),
+      sub:   (_s !== undefined && _s !== null) ? _s : (merged.sub_en   !== undefined ? merged.sub_en   : def.sub_en),
     };
   }
   const SLIDES=SLIDE_DEFS.map((def,i)=>resolveSlide(def, db.heroSlides[i]||{}));
@@ -2188,17 +2190,23 @@ function rShop(r){
       ? `<img class="hero-product-img" src="${s.img}" alt="${s.title}">`
       : ``;
 
+    const _firstCta = i===0 && !db.cur
+      ? `<button class="hero-cta-btn filled" onclick="go('reg')">${lang==='en'?'Register':'注册会员'}</button>`
+      : `<button class="hero-cta-btn filled" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>`;
+    const _secondCta = i===0 && !db.cur
+      ? `<button class="hero-cta-btn" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>`
+      : (!db.cur?`<button class="hero-cta-btn" onclick="go('reg')">${lang==='en'?'Join':'注册会员'}</button>`:'');
     return `<div class="hero-slide" style="background:${bgColor}">
       ${s.img?`<img class="hero-slide-bg" src="${s.img}" alt="">`:``}
       <div class="hero-slide-overlay"></div>
       ${productImg}
       <div class="hero-label">${lang==='en'?'New Arrival · Featured':'新品上市 · 精选'}</div>
       <div class="hero-content">
-        <h1>${s.title}</h1>
-        <p>${s.sub}</p>
+        ${s.title?`<h1>${s.title}</h1>`:''}
+        ${s.sub?`<p>${s.sub}</p>`:''}
         <div class="hero-cta-row">
-          <button class="hero-cta-btn filled" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>
-          ${!db.cur?`<button class="hero-cta-btn" onclick="go('reg')">${lang==='en'?'Join':'注册会员'}</button>`:''}
+          ${_firstCta}
+          ${_secondCta}
         </div>
       </div>
       ${editBtn}
@@ -2246,6 +2254,7 @@ function rShop(r){
         <!-- Section: Image -->
         <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.6px;color:#a39c8f;margin-bottom:10px">Background Image</div>
         <div id="slide-img-preview" style="margin-bottom:8px"></div>
+        <div id="slide-hero-crop-area" style="margin-bottom:8px"></div>
         <label id="slide-img-drop" style="display:flex;flex-direction:column;align-items:center;gap:6px;border:.5px dashed #c4bfb2;border-radius:10px;padding:16px;text-align:center;cursor:pointer;background:#f5f2eb;margin-bottom:8px;transition:background .15s" onmouseover="this.style.background='#edeae0'" onmouseout="this.style.background='#f5f2eb'">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#a39c8f" stroke-width="1.5" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
           <div style="font-size:12px;color:#6b6355;font-weight:500" id="slide-img-upload-label">Upload background image</div>
@@ -2314,7 +2323,6 @@ function rShop(r){
   r.innerHTML=`
     <div class="hero" id="hero-carousel">
       <div class="hero-track" id="hero-track">${slidesHtml}</div>
-      ${slideEditModal||''}
       <button class="hero-arrow prev" onclick="heroStep(-1)" aria-label="Previous">
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 2L5 7l4 5"/></svg>
       </button>
@@ -2327,6 +2335,15 @@ function rShop(r){
 
   rShopProducts();
   _initHeroCarousel();
+  // Inject slide-edit modal at body level so it isn't clipped by .hero overflow:hidden
+  if(db.adm){
+    let _existingModal=document.getElementById('slide-edit-modal');
+    if(_existingModal) _existingModal.remove();
+    const _modalDiv=document.createElement('div');
+    _modalDiv.innerHTML=slideEditModal||'';
+    const _modalEl=_modalDiv.firstElementChild;
+    if(_modalEl) document.body.appendChild(_modalEl);
+  }
 }
 // ── Hero carousel state & logic ──────────────────────────────────────────
 let _heroIdx=0, _heroTotal=3, _heroTimer=null;
@@ -2518,17 +2535,6 @@ async function saveSlideEdit(){
   // Keep legacy keys in sync for slide 0 (heroTextTitle/Sub) — use en values
   if(i===0){ if(title_en) db.heroTextTitle=title_en; if(sub_en) db.heroTextSub=sub_en; }
 
-  // Write hero doc directly to ensure reliable persistence
-  const _heroDocPayload={};
-  if(db.heroImage) _heroDocPayload.heroImage=db.heroImage;
-  (db.heroSlides||[]).forEach((s,si)=>{ if(s) _heroDocPayload['slide'+si]=s; });
-  try{
-    if(_fb&&_fb.doc&&_fb.fsdb&&_fb.setDoc){
-      const heroRef=_fb.doc(_fb.fsdb,'netiva','hero');
-      await _fb.setDoc(heroRef, _heroDocPayload, {merge:true});
-    }
-  }catch(err){ console.warn('Hero doc write failed:',err); }
-
   window._suppressNextHeroRender=true;
   sv(true);
   // Show inline success
@@ -2541,8 +2547,13 @@ async function saveSlideEdit(){
     const _lk2=lang==='zht'?'zht':lang==='zh'?'zh':'en';
     const _rt=db.heroSlides[i]['title_'+_lk2]||db.heroSlides[i].title_en||'';
     const _rs=db.heroSlides[i]['sub_'+_lk2]||db.heroSlides[i].sub_en||'';
-    const h1=sl.querySelector('h1'); if(h1&&_rt) h1.textContent=_rt;
-    const p=sl.querySelector('p'); if(p&&_rs) p.textContent=_rs;
+    // Allow blank headline/subheadline — show/hide element rather than skip update
+    const h1=sl.querySelector('h1');
+    if(_rt){ if(h1){h1.textContent=_rt;}else{const _h=document.createElement('h1');_h.textContent=_rt;sl.querySelector('.hero-content').prepend(_h);} }
+    else{ if(h1)h1.remove(); }
+    const p=sl.querySelector('p');
+    if(_rs){ if(p){p.textContent=_rs;}else{const _p=document.createElement('p');_p.textContent=_rs;const _hc=sl.querySelector('.hero-content');const _h1=_hc.querySelector('h1');if(_h1)_h1.after(_p);else _hc.prepend(_p);} }
+    else{ if(p)p.remove(); }
     const zm=sl.querySelector('.hero-zh-main'); if(zm&&zh_main) zm.textContent=zh_main;
     const zs=sl.querySelector('.hero-zh-sub'); if(zs&&zh_sub) zs.textContent=zh_sub;
     const zt=sl.querySelector('.hero-zh-tag'); if(zt&&zh_tag) zt.textContent=zh_tag;
@@ -2553,8 +2564,9 @@ async function handleSlideImg(e){
   const i=_editingSlideIdx;
   if(i===null||i===undefined) return;
   const f=e.target.files[0]; if(!f) return;
-  const msg=document.getElementById('slide-edit-msg');
-  msg.innerHTML='<div class="m i" style="font-size:12px">⏳ Processing image…</div>';
+  const _setMsg=(html)=>{ const el=document.getElementById('slide-edit-msg'); if(el) el.innerHTML=html; };
+  const msg={innerHTML:''}; // local shim — use _setMsg for actual DOM updates
+  _setMsg('<div class="m i" style="font-size:12px">⏳ Processing image…</div>');
 
   // Compress image via canvas to keep base64 size manageable for DB storage
   let url='';
@@ -2580,7 +2592,7 @@ async function handleSlideImg(e){
       reader.readAsDataURL(f);
     });
   }catch(err){
-    msg.innerHTML='<div class="m e" style="font-size:12px">⚠️ Could not process image.</div>';
+    _setMsg('<div class="m e" style="font-size:12px">⚠️ Could not process image.</div>');
     return;
   }
 
@@ -2592,24 +2604,14 @@ async function handleSlideImg(e){
   if(_fb&&_fb.uploadImage){ try{ savedUrl=await _fb.uploadImage('hero/slide'+i,url)||url; }catch(e){ savedUrl=url; } }
   db.heroSlides[i].img=savedUrl;
 
-  // Write the hero doc directly so the image is guaranteed to be persisted
-  // independently of the main metadata doc (images are stored in 'hero' doc).
-  const _heroDocPayload={};
-  if(db.heroImage) _heroDocPayload.heroImage=db.heroImage;
-  (db.heroSlides||[]).forEach((s,si)=>{ if(s) _heroDocPayload['slide'+si]=s; });
-  try{
-    if(_fb&&_fb.doc&&_fb.fsdb&&_fb.setDoc){
-      const heroRef=_fb.doc(_fb.fsdb,'netiva','hero');
-      await _fb.setDoc(heroRef, _heroDocPayload, {merge:true});
-    }
-  }catch(err){ console.warn('Hero doc write failed:',err); }
-
   // Suppress the hero snapshot listener re-render — DOM is already patched below
   window._suppressNextHeroRender=true;
   sv(true);
+  // Reset file input so the same file can be re-selected
+  e.target.value='';
 
-  msg.innerHTML='<div class="m s" style="font-size:12px">✓ Image saved!</div>';
-  setTimeout(()=>{ if(msg)msg.innerHTML=''; },2000);
+  _setMsg('<div class="m s" style="font-size:12px">✓ Image saved!</div>');
+  setTimeout(()=>{ _setMsg(''); },2000);
   // Update drawer preview
   _refreshSlideImgPreview(i,savedUrl);
   updateSlidePreview();
@@ -2618,8 +2620,9 @@ async function handleSlideImg(e){
   const sl=slides[i];
   if(sl){
     let bg=sl.querySelector('.hero-slide-bg');
-    if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:1'; sl.prepend(bg); }
-    bg.src=savedUrl; bg.style.opacity='1';
+    if(!bg){ bg=document.createElement('img'); bg.className='hero-slide-bg'; bg.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;opacity:0'; sl.prepend(bg); }
+    bg.onload=()=>{ bg.style.opacity='1'; _applyHeroCropToSlide(i); };
+    bg.src=savedUrl;
     // Switch first overlay to lighter colour tint, add bottom-dark overlay if not already there
     const LIGHT_GRADIENTS=[
       'linear-gradient(160deg,rgba(60,32,10,0.30) 0%,rgba(28,14,4,0.42) 45%,rgba(18,8,2,0.60) 100%)',
@@ -2639,14 +2642,125 @@ async function handleSlideImg(e){
 
 function _refreshSlideImgPreview(i,url){
   const preview=document.getElementById('slide-img-preview');
+  const cropArea=document.getElementById('slide-hero-crop-area');
   const removeBtn=document.getElementById('slide-img-remove-btn');
   const uploadLabel=document.getElementById('slide-img-upload-label');
   if(preview) preview.innerHTML=url
-    ?`<div style="border-radius:8px;overflow:hidden;margin-bottom:8px;border:.5px solid #dbd5c8;position:relative"><img src="${url}" style="width:100%;height:110px;object-fit:cover;display:block"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);border-radius:4px;padding:2px 6px;font-size:10px;color:#fff">Current image</div></div><button class="btn sm d" style="width:100%;justify-content:center;margin-bottom:10px;display:flex;gap:6px;align-items:center" onclick="removeSlideImg()"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>Remove image</button>`
+    ?`<div style="border-radius:8px;overflow:hidden;margin-bottom:8px;border:.5px solid #dbd5c8;position:relative"><img src="${url}" style="width:100%;height:110px;object-fit:cover;display:block"><div style="position:absolute;top:6px;right:6px;background:rgba(0,0,0,.45);border-radius:4px;padding:2px 6px;font-size:10px;color:#fff">Current image</div></div><div style="display:flex;gap:6px;margin-bottom:10px"><button class="btn sm" style="flex:1;justify-content:center;gap:5px" onclick="openHeroCropTool(${i})"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M1 4h9M4 1v9M13 10H4M10 13V4"/></svg>Adjust crop & fit</button><button class="btn sm d" style="flex:1;justify-content:center;gap:5px" onclick="removeSlideImg()"><svg width="12" height="12" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l10 10M12 2L2 12"/></svg>Remove image</button></div>`
     :'';
-  // Hide the standalone remove btn — the one inside preview is used instead
+  // Clear crop tool when no image
+  if(!url && cropArea) cropArea.innerHTML='';
+  // Hide the standalone remove btn — the inline ones are used instead
   if(removeBtn) removeBtn.style.display='none';
   if(uploadLabel) uploadLabel.textContent=url?'Replace image':'Upload background image';
+}
+
+/* ── Hero slide crop/pan/zoom tool ── */
+const _heroCropState={};
+function openHeroCropTool(slideIdx){
+  const area=document.getElementById('slide-hero-crop-area');
+  if(!area) return;
+  const url=(db.heroSlides&&db.heroSlides[slideIdx]&&db.heroSlides[slideIdx].img)||'';
+  if(!url){ area.innerHTML=''; return; }
+  const key='hero'+slideIdx;
+  const saved=db.heroSlides[slideIdx]||{};
+  if(!_heroCropState[key]){
+    _heroCropState[key]={scale:saved.cropScale||1,ox:saved.cropX||0,oy:saved.cropY||0,dragging:false,sx:0,sy:0};
+  }
+  area.innerHTML=`
+    <div style="background:#111;border-radius:8px;overflow:hidden;margin-bottom:8px;cursor:grab;user-select:none;position:relative;height:200px" id="hcc-${key}">
+      <canvas id="hcv-${key}" style="display:block;width:100%;height:200px"></canvas>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+      <span style="font-size:11px;color:#6b6355">Zoom</span>
+      <input type="range" id="hcz-${key}" min="0.5" max="4" step="0.01" value="${_heroCropState[key].scale}" oninput="heroCropZoom('${key}',${slideIdx},this.value)" style="flex:1;min-width:80px">
+      <button class="btn sm" onclick="heroCropReset('${key}',${slideIdx})">Reset</button>
+      <button class="btn sm" onclick="applyHeroCrop('${key}',${slideIdx})">Apply</button>
+      <button class="btn sm d" onclick="document.getElementById('slide-hero-crop-area').innerHTML=''">Close</button>
+    </div>
+    <div style="font-size:11px;color:#a39c8f;margin-bottom:8px">Drag to reposition · Zoom to scale · Click Apply to save</div>`;
+  const cc=document.getElementById('hcc-'+key);
+  const canvas=document.getElementById('hcv-'+key);
+  // Set canvas resolution
+  canvas.width=460; canvas.height=200;
+  const img=new Image();
+  img.onload=()=>{
+    _heroCropState[key].img=img;
+    _drawHeroCrop(key);
+    // Mouse drag
+    cc.onmousedown=e=>{_heroCropState[key].dragging=true;_heroCropState[key].sx=e.clientX-_heroCropState[key].ox;_heroCropState[key].sy=e.clientY-_heroCropState[key].oy;e.preventDefault();cc.style.cursor='grabbing';};
+    window.addEventListener('mousemove',function _hcmm(e){if(!_heroCropState[key]||!_heroCropState[key].dragging)return;_heroCropState[key].ox=e.clientX-_heroCropState[key].sx;_heroCropState[key].oy=e.clientY-_heroCropState[key].sy;_drawHeroCrop(key);});
+    window.addEventListener('mouseup',()=>{if(_heroCropState[key])_heroCropState[key].dragging=false;if(cc)cc.style.cursor='grab';});
+    // Touch
+    cc.ontouchstart=e=>{_heroCropState[key].dragging=true;_heroCropState[key].sx=e.touches[0].clientX-_heroCropState[key].ox;_heroCropState[key].sy=e.touches[0].clientY-_heroCropState[key].oy;};
+    cc.ontouchmove=e=>{if(!_heroCropState[key].dragging)return;_heroCropState[key].ox=e.touches[0].clientX-_heroCropState[key].sx;_heroCropState[key].oy=e.touches[0].clientY-_heroCropState[key].sy;_drawHeroCrop(key);e.preventDefault();};
+    cc.ontouchend=()=>{_heroCropState[key].dragging=false;};
+  };
+  img.src=url;
+}
+function _drawHeroCrop(key){
+  const canvas=document.getElementById('hcv-'+key);
+  if(!canvas) return;
+  const s=_heroCropState[key];
+  if(!s||!s.img) return;
+  const cw=canvas.width, ch=canvas.height;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,cw,ch);
+  const iw=s.img.naturalWidth, ih=s.img.naturalHeight;
+  // Base scale so image covers the canvas
+  const baseScale=Math.max(cw/iw, ch/ih);
+  const drawW=iw*baseScale*s.scale, drawH=ih*baseScale*s.scale;
+  const cx=cw/2+s.ox, cy=ch/2+s.oy;
+  ctx.drawImage(s.img, cx-drawW/2, cy-drawH/2, drawW, drawH);
+}
+function heroCropZoom(key,slideIdx,val){
+  _heroCropState[key].scale=parseFloat(val);
+  _drawHeroCrop(key);
+}
+function heroCropReset(key,slideIdx){
+  _heroCropState[key].scale=1;_heroCropState[key].ox=0;_heroCropState[key].oy=0;
+  const zEl=document.getElementById('hcz-'+key);if(zEl)zEl.value=1;
+  _drawHeroCrop(key);
+}
+function applyHeroCrop(key,slideIdx){
+  const s=_heroCropState[key];
+  if(!s||slideIdx===null||slideIdx===undefined) return;
+  if(!db.heroSlides) db.heroSlides=[{},{},{}];
+  if(!db.heroSlides[slideIdx]) db.heroSlides[slideIdx]={};
+  db.heroSlides[slideIdx].cropScale=s.scale;
+  db.heroSlides[slideIdx].cropX=s.ox;
+  db.heroSlides[slideIdx].cropY=s.oy;
+  // Apply to live slide background using object-position
+  _applyHeroCropToSlide(slideIdx);
+  window._suppressNextHeroRender=true;
+  sv(true);
+  const area=document.getElementById('slide-hero-crop-area');
+  if(area){
+    const oldInner=area.innerHTML;
+    area.insertAdjacentHTML('afterbegin','<div class="m s" style="font-size:12px;margin-bottom:6px">✓ Crop applied!</div>');
+    setTimeout(()=>{const msg=area.querySelector('.m.s');if(msg)msg.remove();},1500);
+  }
+}
+function _applyHeroCropToSlide(slideIdx){
+  const s=db.heroSlides&&db.heroSlides[slideIdx];
+  if(!s) return;
+  const slides=document.querySelectorAll('.hero-slide');
+  const sl=slides[slideIdx];
+  if(!sl) return;
+  const bg=sl.querySelector('.hero-slide-bg');
+  if(!bg||!bg.src) return;
+  // Convert canvas offset to CSS object-position percentage
+  // ox/oy are pixel offsets from center in the 460×200 canvas; map to %
+  const cw=460,ch=200;
+  const scale=s.cropScale||1;
+  // object-position: x% y%
+  // center = 50% 50%; ox shifts x, oy shifts y
+  const pctX=50 - (s.cropX||0)/cw*100/scale;
+  const pctY=50 - (s.cropY||0)/ch*100/scale;
+  bg.style.objectFit='cover';
+  bg.style.objectPosition=`${Math.max(0,Math.min(100,pctX)).toFixed(1)}% ${Math.max(0,Math.min(100,pctY)).toFixed(1)}%`;
+  bg.style.transform=`scale(${scale})`;
+  bg.style.transformOrigin='center center';
 }
 
 function removeSlideImg(){
@@ -2657,6 +2771,7 @@ function removeSlideImg(){
   window._suppressNextHeroRender=true;
   sv(true);
   _refreshSlideImgPreview(i,'');
+  const _ca=document.getElementById('slide-hero-crop-area');if(_ca)_ca.innerHTML='';
   updateSlidePreview();
   // Remove image and restore full colour gradient on live slide
   const slides=document.querySelectorAll('.hero-slide');

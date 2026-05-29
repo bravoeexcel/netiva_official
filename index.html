@@ -76,16 +76,31 @@
     .nav-link-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; cursor: pointer; background: transparent; border: none; color: var(--color-text-secondary); padding: 4px 2px; }
     .nav-link-btn:hover { color: var(--color-text-primary); }
     /* Icon-above-label nav item style */
-    .nav-icon-btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; cursor: pointer; background: transparent; border: none; color: var(--color-text-secondary); padding: 2px 6px; font-family: var(--font-sans); transition: color .15s; min-height: 38px; }
-    .nav-icon-btn:hover { color: var(--color-text-primary); }
+    .nav-icon-btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; cursor: pointer; background: transparent; border: none; color: var(--color-text-secondary); padding: 2px 6px; font-family: var(--font-sans); transition: color .2s, background .2s; min-height: 38px; border-radius: 8px; }
     .nav-icon-btn span { font-size: 10px; line-height: 1; white-space: nowrap; }
+    /* Shop button: sage green on hover */
+    #nav-shop:hover { color: var(--splash-sage); }
+    #nav-shop:active { color: #fff; background: var(--splash-sage); }
+    /* Admin button: sand/gold on hover */
+    #nav-admin:hover { color: var(--splash-sand); }
+    #nav-admin:active { color: #fff; background: var(--splash-sand); }
     .nav.nav-hero .nav-icon-btn { color: rgba(248,245,238,0.88); }
     .nav.nav-hero .nav-icon-btn:hover { color: #fff; }
-    .nav-cart-icon-btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; cursor: pointer; background: transparent; border: none; color: var(--color-text-secondary); padding: 2px 6px; font-family: var(--font-sans); position: relative; transition: color .15s; min-height: 38px; }
-    .nav-cart-icon-btn:hover { color: var(--color-text-primary); }
+    .nav-cart-icon-btn { display: inline-flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px; cursor: pointer; background: transparent; border: none; color: var(--color-text-secondary); padding: 2px 6px; font-family: var(--font-sans); position: relative; transition: color .2s, background .2s; min-height: 38px; border-radius: 8px; }
+    /* Cart button: cobalt blue on hover */
+    .nav-cart-icon-btn:hover { color: var(--splash-cobalt); }
+    .nav-cart-icon-btn:active { color: #fff; background: var(--splash-cobalt); }
     .nav-cart-icon-btn span.label { font-size: 10px; line-height: 1; white-space: nowrap; }
     .nav.nav-hero .nav-cart-icon-btn { color: rgba(248,245,238,0.88); }
     .nav.nav-hero .nav-cart-icon-btn:hover { color: #fff; }
+    /* Register/Login/Account buttons in #nr: plum on hover */
+    #nr .nav-icon-btn:nth-child(1):hover { color: var(--splash-plum); }
+    #nr .nav-icon-btn:nth-child(1):active { color: #fff; background: var(--splash-plum); }
+    #nr .nav-icon-btn:nth-child(2):hover { color: #c0392b; }
+    #nr .nav-icon-btn:nth-child(2):active { color: #fff; background: #c0392b; }
+    /* Admin (logged-in) button stays warm brown */
+    #nr .nav-icon-btn[style*="854F0B"]:hover { color: var(--splash-sand) !important; }
+    #nr .nav-icon-btn[style*="854F0B"]:active { color: #fff !important; background: var(--splash-sand); }
     /* Legacy lang-toggle hidden */
     .lang-toggle { display: none; }
 
@@ -105,7 +120,7 @@
 
     /* ── Hero Carousel — Heytea style ──────────────────────────── */
     .hero-wrapper { padding: 1rem 1.5rem 0; }
-    .hero { position: relative; min-height: 500px; height: 500px; overflow: hidden; background: #f5f3ef; border-radius: 16px; }
+    .hero { position: relative; min-height: 500px; height: 500px; overflow: hidden; background: #f5f3ef; border-radius: 16px; box-shadow: 0 2px 20px rgba(0,0,0,0.07); }
     .hero.no-img { background: #f5f3ef; min-height: 380px; height: 380px; }
 
     /* Carousel track */

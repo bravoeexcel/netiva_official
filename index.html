@@ -146,7 +146,7 @@
     /* Bottom-left: headline block */
     .hero-content {
       position: absolute; bottom: 3.5rem; left: 2.5rem; z-index: 3;
-      max-width: 320px;
+      max-width: 340px; min-width: 260px;
     }
     .hero h1 {
       font-size: 28px; font-weight: 400; line-height: 1.2;
@@ -158,12 +158,12 @@
     /* CTA buttons — Heytea outlined rectangle pair */
     .hero-cta-row { display: flex; gap: 10px; }
     .hero-cta-btn {
-      flex: 1; max-width: 140px;
-      padding: 11px 0; text-align: center;
+      flex: 0 0 auto; min-width: 120px; max-width: 160px;
+      padding: 11px 20px; text-align: center;
       font-size: 13px; font-weight: 400; letter-spacing: .03em;
       border: 1px solid #1a1a1a; background: transparent; color: #1a1a1a;
       border-radius: 3px; cursor: pointer; transition: all .18s;
-      font-family: var(--font-sans);
+      font-family: var(--font-sans); white-space: nowrap;
     }
     .hero-cta-btn:hover { background: #1a1a1a; color: #fff; }
     .hero-cta-btn.filled { background: #1a1a1a; color: #fff; }
@@ -215,9 +215,9 @@
 
     @media (max-width: 600px) {
       .hero { min-height: 480px; height: 480px; }
-      .hero-content { left: 1.5rem; bottom: 2.5rem; max-width: 200px; }
+      .hero-content { left: 1.5rem; bottom: 2.5rem; max-width: 220px; min-width: 0; }
       .hero h1 { font-size: 22px; }
-      .hero-cta-btn { max-width: 120px; font-size: 12px; padding: 9px 0; }
+      .hero-cta-btn { min-width: 100px; max-width: 140px; font-size: 12px; padding: 9px 14px; }
       .hero-label { left: 1.5rem; }
       .hero-product-img { max-width: 65%; }
     }
@@ -2190,10 +2190,13 @@ function rShop(r){
       ? `<img class="hero-product-img" src="${s.img}" alt="${s.title}">`
       : ``;
 
-    const _firstCta = i===0 && !db.cur
-      ? `<button class="hero-cta-btn filled" onclick="go('reg')">${lang==='en'?'Register':'注册会员'}</button>`
+    // Slide 0 & 1: primary = Register (when not logged in), secondary = Shop Now
+    // Slide 2+: primary = Shop Now, secondary = Join
+    const _isRegSlide = (i===0||i===1) && !db.cur;
+    const _firstCta = _isRegSlide
+      ? `<button class="hero-cta-btn filled" onclick="go('reg')">${lang==='en'?'Register Now':'立即注册'}</button>`
       : `<button class="hero-cta-btn filled" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>`;
-    const _secondCta = i===0 && !db.cur
+    const _secondCta = _isRegSlide
       ? `<button class="hero-cta-btn" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>`
       : (!db.cur?`<button class="hero-cta-btn" onclick="go('reg')">${lang==='en'?'Join':'注册会员'}</button>`:'');
     return `<div class="hero-slide" style="background:${bgColor}">
@@ -2566,33 +2569,19 @@ async function handleSlideImg(e){
   const f=e.target.files[0]; if(!f) return;
   const _setMsg=(html)=>{ const el=document.getElementById('slide-edit-msg'); if(el) el.innerHTML=html; };
   const msg={innerHTML:''}; // local shim — use _setMsg for actual DOM updates
-  _setMsg('<div class="m i" style="font-size:12px">⏳ Processing image…</div>');
+  _setMsg('<div class="m i" style="font-size:12px">⏳ Uploading image…</div>');
 
-  // Compress image via canvas to keep base64 size manageable for DB storage
+  // Read file directly as base64 — no compression, full original quality
   let url='';
   try{
     url = await new Promise((resolve, reject)=>{
       const reader=new FileReader();
-      reader.onload=(ev)=>{
-        const img=new Image();
-        img.onload=()=>{
-          const MAX=1200; // max dimension in px
-          let w=img.width, h=img.height;
-          if(w>MAX||h>MAX){ if(w>h){h=Math.round(h*MAX/w);w=MAX;}else{w=Math.round(w*MAX/h);h=MAX;} }
-          const canvas=document.createElement('canvas');
-          canvas.width=w; canvas.height=h;
-          const ctx=canvas.getContext('2d');
-          ctx.drawImage(img,0,0,w,h);
-          resolve(canvas.toDataURL('image/jpeg',0.82));
-        };
-        img.onerror=reject;
-        img.src=ev.target.result;
-      };
+      reader.onload=(ev)=>resolve(ev.target.result);
       reader.onerror=reject;
       reader.readAsDataURL(f);
     });
   }catch(err){
-    _setMsg('<div class="m e" style="font-size:12px">⚠️ Could not process image.</div>');
+    _setMsg('<div class="m e" style="font-size:12px">⚠️ Could not read image.</div>');
     return;
   }
 

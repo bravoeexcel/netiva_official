@@ -170,27 +170,10 @@
     .hero-cta-btn.filled:hover { background: #333; }
 
     /* Heytea-style scattered Chinese characters — decorative, sparse, handwritten feel */
-    .hero-zh-text {
-      position: absolute; z-index: 3; pointer-events: none;
-      right: 2.5rem; top: 50%; transform: translateY(-50%);
-      display: flex; flex-direction: column; align-items: flex-end; gap: 6px;
-    }
-    .hero-zh-main {
-      font-size: 52px; font-weight: 400; line-height: 1;
-      color: rgba(26,26,26,0.82); letter-spacing: 8px;
-      font-family: 'Noto Serif SC', serif;
-      writing-mode: vertical-rl; text-orientation: upright;
-    }
-    .hero-zh-sub {
-      font-size: 13px; font-weight: 300; color: #bbb;
-      letter-spacing: 5px; writing-mode: vertical-rl; text-orientation: upright;
-      font-family: 'Noto Serif SC', serif; margin-top: 6px;
-    }
-    .hero-zh-tag {
-      font-size: 10px; color: #ccc; letter-spacing: .12em;
-      text-transform: uppercase; font-family: var(--font-sans);
-      writing-mode: horizontal-tb; margin-top: 16px; text-align: right;
-    }
+    .hero-zh-text { display: none; }
+    .hero-zh-main { display: none; }
+    .hero-zh-sub { display: none; }
+    .hero-zh-tag { display: none; }
     .hero-zh-divider { display: none; }
 
     /* Admin edit button */
@@ -234,8 +217,6 @@
       .hero { min-height: 480px; height: 480px; }
       .hero-content { left: 1.5rem; bottom: 2.5rem; max-width: 200px; }
       .hero h1 { font-size: 22px; }
-      .hero-zh-text { right: 1.5rem; }
-      .hero-zh-main { font-size: 38px; letter-spacing: 6px; }
       .hero-cta-btn { max-width: 120px; font-size: 12px; padding: 9px 0; }
       .hero-label { left: 1.5rem; }
       .hero-product-img { max-width: 65%; }
@@ -942,7 +923,7 @@ const T={
     cart:'Cart',myAccount:'My Account',logout:'Sign Out',
     heroTitle:'Fresh from the source',heroSub:'Artisan foods & drinks, delivered to your door',
     shopNow:'Shop Now',registerWithCode:'Register with Referral Code →',
-    allCats:'All',pantry:'Pantry',drinks:'Drinks',snacks:'Snacks',fresh:'Fresh',
+    allCats:'All',signature:'Signature Products',beverages:'Beverages',powdered:'Powdered Beverage',beauty:'Beauty Cosmetics',
     addToCart:'Add',noCatProds:'No products in this category',
     cartTitle:'Cart',cartEmpty:'Your cart is empty',subtotal:'Subtotal',
     fee:'Service Fee',feeRate:'1.5%',total:'Total',checkout:'Proceed to Checkout →',
@@ -1016,7 +997,7 @@ const T={
     cart:'购物车',myAccount:'我的账户',logout:'退出',
     heroTitle:'源自自然的美味',heroSub:'精选食品与饮品，直达您的门口',
     shopNow:'立即选购',registerWithCode:'持推荐码注册 →',
-    allCats:'全部',pantry:'食品柜',drinks:'饮品',snacks:'零食',fresh:'新鲜',
+    allCats:'全部',signature:'特色营养产品',beverages:'饮品',powdered:'粉末状冲泡饮料',beauty:'美容化妆品',
     addToCart:'加入',noCatProds:'该分类暂无商品',
     cartTitle:'购物车',cartEmpty:'购物车是空的',subtotal:'小计',
     fee:'手续费',feeRate:'1.5%',total:'应付总额',checkout:'前往结账 →',
@@ -1090,7 +1071,7 @@ const T={
     cart:'購物車',myAccount:'我的帳戶',logout:'登出',
     heroTitle:'源自自然的美味',heroSub:'精選食品與飲品，直達您的門口',
     shopNow:'立即選購',registerWithCode:'持推薦碼註冊 →',
-    allCats:'全部',pantry:'食品櫃',drinks:'飲品',snacks:'零食',fresh:'新鮮',
+    allCats:'全部',signature:'特色營養產品',beverages:'飲品',powdered:'粉狀沖泡飲料',beauty:'美容化妝品',
     addToCart:'加入',noCatProds:'該分類暫無商品',
     cartTitle:'購物車',cartEmpty:'購物車是空的',subtotal:'小計',
     fee:'手續費',feeRate:'1.5%',total:'應付總額',checkout:'前往結帳 →',
@@ -2218,13 +2199,6 @@ function rShop(r){
           <button class="hero-cta-btn filled" onclick="document.getElementById('mp').scrollIntoView({behavior:'smooth'})">${lang==='en'?'Shop Now':'立即选购'}</button>
           ${!db.cur?`<button class="hero-cta-btn" onclick="go('reg')">${lang==='en'?'Join':'注册会员'}</button>`:''}
         </div>
-      </div>
-      <div class="hero-zh-text">
-        <div class="hero-zh-col">
-          <span class="hero-zh-main">${s.zh_main}</span>
-          <span class="hero-zh-sub">${s.zh_sub}</span>
-        </div>
-        <span class="hero-zh-tag">${s.zh_tag}</span>
       </div>
       ${editBtn}
     </div>`;

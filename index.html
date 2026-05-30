@@ -2380,7 +2380,7 @@ function rShop(r){
   const adminHeroBar=db.adm?'':'' ;
 
   const cats=db.categories||[];
-  const pillsHtml=cats.length>1?`<div class="filters" id="shop-filters">${cats.map(cat=>`<button class="fpill${_shopCat===cat.id?' on':''}" onclick="setShopCat('${cat.id}')">${lang==='zht'?(cat.label_zht||cat.label_en):lang==='zh'?(cat.label_zh||cat.label_en):cat.label_en}</button>`).join('')}</div>`:'';
+  const pillsHtml='';
 
   r.innerHTML=`
     <div class="hero-wrapper"><div class="hero" id="hero-carousel">
